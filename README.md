@@ -1,6 +1,5 @@
 # CFTWO-Panel
 
-[![部署到 Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhanhaoops%2FCFTWO-Panel&project-name=cftwo-panel&repository-name=cftwo-panel)
 [![Node.js 22](https://img.shields.io/badge/Node.js-22-43853d)](https://nodejs.org/)
 [![源码许可](https://img.shields.io/badge/源码许可-署名与禁止冒充原创-blue)](./LICENSE)
 
@@ -21,6 +20,8 @@ CFTWO-Panel 是一个独立面板，提供连接管理、配置管理、优选�
 已经部署的用户可以在控制台点击“用已保存配置生成”，将当前 Worker 的配置带入构建页。这样可以保留原 UUID，再生成自己的新版本。
 
 ## 一键部署
+
+[![部署到 Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhanhaoops%2FCFTWO-Panel&project-name=cftwo-panel&repository-name=cftwo-panel)
 
 点击顶部按钮后，Vercel 会创建一个私有 GitHub 仓库并部署独立面板。按钮使用小写的 `cftwo-panel` 作为默认项目名和仓库名，符合 GitHub 命名习惯。若希望每次使用不同的私有仓库名，可在 Vercel 创建页面把 **Private Repository Name** 改成类似 `cftwo-panel-7m4k` 的随机小写名称。
 
