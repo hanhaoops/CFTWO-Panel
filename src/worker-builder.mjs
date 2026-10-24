@@ -73,7 +73,7 @@ export default {
  * Based on byJoey/cfnew (core-only, commit 12dc411f79323b7204ae69281fa42d32ec86a9b2).
  * Source: https://github.com/byJoey/cfnew
  * Original credits: zizifn/edgetunnel, cmliu, qwer-search, bestcfipas.
- * Panel modifications: https://github.com/hanhaoops/cfnew-panel
+ * Panel modifications: https://github.com/hanhaoops/CFTWO-Panel
  * Changes: personal configuration defaults and deterministic identifier mangling.
  * Compatibility date: 2026-01-20. Bind KV as C or c for online configuration.
  * Contains your connection credentials. Keep this file private.

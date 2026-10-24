@@ -213,7 +213,7 @@ export async function handlePanel(request) {
     if (subscription) return new Response('订阅更新失败：' + error.message, { status: error.status || 503 });
     if (!legacy && [403, 404].includes(error.upstreamStatus)) return new Response('Not Found', { status: 404 });
     const message = String(error.message).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
-    return new Response('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>连接未完成</title>' + theme + '<body class="landing"><main><div class="brand">CFNEW</div><h1>连接未完成</h1><p>' + message + '</p><a href="/">返回重新填写</a></main></body></html>', { status: error.status || 400, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+    return new Response('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>连接未完成 · CFTWO-Panel</title>' + theme + '<body class="landing"><main><div class="brand">CFTWO-Panel</div><h1>连接未完成</h1><p>' + message + '</p><a href="/">返回重新填写</a></main></body></html>', { status: error.status || 400, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
   }
 }
 
@@ -249,5 +249,5 @@ export function createPanelServer() {
 if (!process.env.VERCEL && process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const port = Number(process.env.PORT || 3100);
   const host = process.env.HOST || '127.0.0.1';
-  createPanelServer().listen(port, host, () => console.log('CFnew 独立面板已启动，端口 ' + port));
+  createPanelServer().listen(port, host, () => console.log('CFTWO-Panel已启动，端口 ' + port));
 }

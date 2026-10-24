@@ -1960,10 +1960,10 @@ async function 处理订阅值(请求241, 用户240 = null) {
     </head>
     <body class="workspace console-page">
         <aside class="sidebar">
-          <a class="wordmark" href="/"><span class="logo-mark">C</span> CFnew<span class="edition">WORKSPACE</span></a>
+          <a class="wordmark" href="/"><span class="logo-mark">C</span> CFTWO-Panel<span class="edition">WORKSPACE</span></a>
           <div class="nav-caption">工作空间</div>
           <nav aria-label="主导航"><a class="active" href="#"><span class="nav-icon">▦</span>连接控制台</a><a href="/builder"><span class="nav-icon">◇</span>个人 Worker<span class="nav-tag">NEW</span></a></nav>
-          <div class="sidebar-bottom">独立部署，自主管理<br><small>基于 CFnew · byJoey</small></div>
+          <div class="sidebar-bottom">独立部署，自主管理<br><small>基于 CFTWO-Panel · byJoey</small></div>
         </aside>
         <div class="console-topline"><span>工作空间 / 连接控制台</span><select id="languageSelector" aria-label="语言" onchange="切换语言(this.value)"><option value="zh" ${!是否值236 ? 'selected' : ''}>中文</option><option value="fa" ${是否值236 ? 'selected' : ''}>فارسی</option></select></div>
         <div class="container">
@@ -2339,7 +2339,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
             <div class="card">
                     <h2 class="card-title">${翻译值.relatedLinks}</h2>
                 <div style="text-align: center; margin: 20px 0">
-                        <a href="https://github.com/byJoey/cfnew" target="_blank" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">${翻译值.githubProject}</a>
+                        <a href="https://github.com/hanhaoops/CFTWO-Panel" target="_blank" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">${翻译值.githubProject}</a>
                         <a href="https://github.com/byJoey/yx-tools/releases/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">${翻译值.优选工具}</a>
                     <a href="https://www.youtube.com/@joeyblog" target="_blank" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">YouTube @joeyblog</a>
                 </div>

@@ -1,12 +1,12 @@
-# CFnew 独立面板
+# CFTWO-Panel
 
-[![部署到 Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FbyJoey%2Fcfnew-panel&project-name=cfnew-panel&repository-name=cfnew-panel)
+[![部署到 Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fhanhaoops%2FCFTWO-Panel&project-name=CFTWO-Panel&repository-name=CFTWO-Panel)
 [![Node.js 22](https://img.shields.io/badge/Node.js-22-43853d)](https://nodejs.org/)
 [![源码许可](https://img.shields.io/badge/源码许可-署名与禁止冒充原创-blue)](./LICENSE)
 
 把 CFnew 控制台、优选操作和订阅生成放在 Vercel，Cloudflare Worker 只负责代理转发和 KV 配置。节点流量直接连接你自己的 Worker，不经过面板。
 
-图文教程：[CFnew 独立面板：Vercel 一键部署](https://joeyblog.net/cfnew-panel-vercel-deploy.html)。
+图文教程：[CFTWO-Panel：Vercel 一键部署](https://joeyblog.net/cfnew-panel-vercel-deploy.html)。
 
 ## 一键部署
 
@@ -20,7 +20,7 @@
 
 如果仓库列表为空，先到 Vercel 账号的 Authentication → Sign-in Methods 连接 GitHub，再返回部署页面。
 
-GitHub 中已经有自己的 `cfnew-panel` 仓库时，在 Vercel 的 New Project → Import Git Repository 选择该仓库即可。通过 Git 连接部署后，推送到 `main` 会自动更新正式站；其它分支用于预览。已有源码无需删掉重建。
+GitHub 中已经有自己的 `CFTWO-Panel` 仓库时，在 Vercel 的 New Project → Import Git Repository 选择该仓库即可。通过 Git 连接部署后，推送到 `main` 会自动更新正式站；其它分支用于预览。已有源码无需删掉重建。
 
 ## 可选变量：w
 
@@ -84,8 +84,8 @@ Clash： /sub?host=your-worker.example.com&uuid=你的UUID&target=clash
 Node.js 22：
 
 ```bash
-git clone https://github.com/byJoey/cfnew-panel.git
-cd cfnew-panel
+git clone https://github.com/hanhaoops/CFTWO-Panel.git
+cd CFTWO-Panel
 npm start
 # 可选：固定自己的 Worker
 w=https://your-worker.example.com npm start
