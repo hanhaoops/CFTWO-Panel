@@ -4,9 +4,15 @@
 [![Node.js 22](https://img.shields.io/badge/Node.js-22-43853d)](https://nodejs.org/)
 [![源码许可](https://img.shields.io/badge/源码许可-署名与禁止冒充原创-blue)](./LICENSE)
 
-CFTWO-Panel 是一个独立的 Worker 管理面板。它负责连接控制台、配置管理、优选地址和客户端订阅；代理数据直接在用户的 Cloudflare Worker 与客户端之间传输，不经过面板。
+## 简介
 
-## 个人 Worker 工作流
+CFTWO-Panel 是一个独立面板，提供连接管理、配置管理、优选地址和客户端订阅功能。面板可以运行在 Vercel、Docker 或自有服务器上；代理数据直接在用户的 Cloudflare Worker 与客户端之间传输，不经过面板。
+
+在线地址：[https://cf2panel.vercel.app/](https://cf2panel.vercel.app/)
+
+![CFTWO-Panel 个人 Worker 构建页](docs/images/cftwo-panel-builder.png)
+
+## 个人 Worker
 
 每个用户都可以在面板首页打开“个人 Worker”，填写自己的 UUID、个人构建码和连接设置，然后下载属于自己的 `_worker.js` 或 `Pages.zip`。下载后在 Cloudflare Dashboard 中创建自己的 Worker 或 Pages 项目并上传文件，再用部署后的域名回到面板连接。
 
@@ -14,9 +20,9 @@ CFTWO-Panel 是一个独立的 Worker 管理面板。它负责连接控制台、
 
 已经部署的用户可以在控制台点击“用已保存配置生成”，将当前 Worker 的配置带入构建页。这样可以保留原 UUID，再生成自己的新版本。
 
-## 用 Vercel 部署面板
+## 一键部署
 
-点击顶部按钮后，Vercel 会创建一个私有 GitHub 仓库并部署面板。按钮使用小写的 `cftwo-panel` 作为默认项目名和仓库名，符合 GitHub 命名习惯。若希望每次使用不同的私有仓库名，可在 Vercel 创建页面把 **Private Repository Name** 改成类似 `cftwo-panel-7m4k` 的随机小写名称。
+点击顶部按钮后，Vercel 会创建一个私有 GitHub 仓库并部署独立面板。按钮使用小写的 `cftwo-panel` 作为默认项目名和仓库名，符合 GitHub 命名习惯。若希望每次使用不同的私有仓库名，可在 Vercel 创建页面把 **Private Repository Name** 改成类似 `cftwo-panel-7m4k` 的随机小写名称。
 
 部署时选择 **Other**（旧界面叫 Framework），根目录保持仓库根目录，不需要填写额外构建命令。部署完成后打开分配的域名，进入个人 Worker 页面或连接已有 Worker。
 
