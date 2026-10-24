@@ -35,6 +35,12 @@ GitHub 中已经有自己的 `cfnew-panel` 仓库时，在 Vercel 的 New Projec
 
 `w` 不需要写到 Worker 内核里，也不代替 UUID 验证。面板不能凭这个变量替你隐藏 Worker 的全部网络路径。
 
+## 面板内个人 Worker 构建
+
+打开面板首页的“个人 Worker”，填写 UUID、个人构建码和协议设置后，可以直接下载 `_worker.js` 或 `Pages.zip`，再在 Cloudflare Dashboard 中手动部署。构建码只用于每次构建的确定性代码命名和版本标识；面板不会保存构建码或下载文件，部署后的 Worker 仍使用原有协议、订阅格式和 `C`/`c` KV 配置。
+
+已部署节点的控制台中也有“用已保存配置生成”入口，会读取当前 Worker 的配置并带入构建页。代码混淆用于构建差异和源码整理，不是流量加密，也不保证规避 Cloudflare 的平台规则或滥用判断；请按平台服务条款使用。
+
 固定 Worker 后：
 
 ```text

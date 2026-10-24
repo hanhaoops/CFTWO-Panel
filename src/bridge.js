@@ -18,6 +18,39 @@ else {
   history.replaceState(null, '', panelLocation);
 }
 document.addEventListener('DOMContentLoaded', () => {
+  const builderCard = document.createElement('section');
+  builderCard.className = 'card console-builder-card';
+  const builderDescription = document.createElement('div');
+  const builderTitle = document.createElement('h2');
+  builderTitle.textContent = '构建个人 Worker';
+  const builderHint = document.createElement('p');
+  builderHint.textContent = '带入已保存的配置，生成个人版本并下载到本地。';
+  const builderError = document.createElement('small');
+  builderError.setAttribute('role', 'status');
+  const buildButton = document.createElement('button');
+  buildButton.type = 'button';
+  buildButton.className = 'button-primary';
+  buildButton.id = 'buildFromSaved';
+  buildButton.textContent = '用已保存配置生成 ↗';
+  buildButton.addEventListener('click', async () => {
+    buildButton.disabled = true;
+    builderError.textContent = '';
+    try {
+      const response = await fetch(window.CFNEW.apiBase + '/api/config', { cache: 'no-store' });
+      if (!response.ok) throw new Error('读取失败，请刷新后重试。');
+      const config = await response.json();
+      const keys = ['freeCpu','wk','ev','et','ex','ech','tp','customDNS','customECHDomain','alpn','d','p','yx','yxURL','s','homepage','scu','ena','epd','epi','egi','ae','rm','qj','dkby','yxby','ipv4','ipv6','ispMobile','ispUnicom','ispTelecom','jk'];
+      const settings = Object.fromEntries(keys.filter(key => config[key] !== undefined && config[key] !== null).map(key => [key, config[key]]));
+      sessionStorage.setItem('cfnew-builder-draft', JSON.stringify({ uuid: window.CFNEW.uuid, settings }));
+      location.assign('/builder#import');
+    } catch (error) {
+      builderError.textContent = error.message || '浏览器暂时无法带入配置，请直接打开个人 Worker 页面。';
+      buildButton.disabled = false;
+    }
+  });
+  builderDescription.append(builderTitle, builderHint, builderError);
+  builderCard.append(builderDescription, buildButton);
+  document.querySelector('.container .header')?.after(builderCard);
   const release = window.CFNEW.release;
   const ignoredUpdateKey = 'cfnew-panel-ignored-update';
   let ignoredVersion = '';

@@ -13,3 +13,5 @@
 - 分流规则：[MetaCubeX/meta-rules-dat](https://github.com/MetaCubeX/meta-rules-dat)
 
 测试夹具 test/core-fixture.mjs 来自 CFnew 的 core-only 分支，仅用于隔离测试，不会在面板中运行或部署到 Vercel。
+
+个人 Worker 构建器使用 `src/worker-core.js` 中随面板发布的 CFnew core-only 内核副本，并通过 Terser 与 fflate 生成下载文件；这些依赖保留各自的许可证和版权信息。

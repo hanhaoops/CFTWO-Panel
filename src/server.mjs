@@ -7,12 +7,14 @@ import { pathToFileURL } from 'node:url';
 import { createSubscriptionEngine } from './engine.mjs';
 import { isPublicAddress, fetchPreferredList, probePreferred } from './preferred.mjs';
 import { PANEL_VERSION, coreRelease } from './release.mjs';
+import { handleBuildDownload, CORE_VERSION } from './worker-builder.mjs';
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const privateTesting = process.env.CFNEW_ALLOW_PRIVATE === 'yes';
 const theme = '<style>' + await readFile(new URL('./theme.css', import.meta.url), 'utf8') + '</style>';
 const landing = (await readFile(new URL('./index.html', import.meta.url), 'utf8')).replace('__CFNEW_PANEL_VERSION__', PANEL_VERSION).replace('</head>', theme + '</head>');
 const bridge = await readFile(new URL('./bridge.js', import.meta.url), 'utf8');
+const builderPage = (await readFile(new URL('./builder.html', import.meta.url), 'utf8')).replaceAll('__CFNEW_CORE_VERSION__', CORE_VERSION).replace('</head>', theme + '</head>');
 const rulesLicense = await readFile(new URL('./singbox-rules.NOTICE.md', import.meta.url), 'utf8') + '\n' + await readFile(new URL('./singbox-rules.LICENSE', import.meta.url), 'utf8');
 const safeJson = value => JSON.stringify(value).replaceAll('<', '\\u003c');
 const preferredAuth = new Map();
@@ -148,6 +150,10 @@ async function handleWorkerApi(request, workerBase, access, suffix) {
 
 export async function handlePanel(request) {
   const url = new URL(request.url);
+  if (url.pathname === '/api/builder/download') return handleBuildDownload(request);
+  if (url.pathname === '/builder' && ['GET', 'HEAD'].includes(request.method)) {
+    return new Response(builderPage, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
+  }
   if (url.pathname.startsWith('/worker-api/')) {
     const match = url.pathname.match(/^\/worker-api\/([^/]+)\/([0-9a-f-]+)(\/.*)$/i);
     if (!match || !uuidPattern.test(match[2])) return Response.json({ success: false, message: '接口地址无效' }, { status: 400 });

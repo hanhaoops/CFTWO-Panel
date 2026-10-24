@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>个人 Worker · CFnew</title>
+</head>
+<body class="workspace builder-page">
+<aside class="sidebar">
+  <a class="wordmark" href="/"><span class="logo-mark">C</span> CFnew<span class="edition">WORKSPACE</span></a>
+  <div class="nav-caption">工作空间</div>
+  <nav aria-label="主导航">
+    <a href="/"><span class="nav-icon">▦</span>连接控制台</a>
+    <a class="active" href="/builder" aria-current="page"><span class="nav-icon">◇</span>个人 Worker<span class="nav-tag">NEW</span></a>
+  </nav>
+  <div class="sidebar-bottom"><span class="muted-dot"></span>独立部署，自主管理<br><small>基于 CFnew · byJoey</small></div>
+</aside>
+<main class="workspace-main">
+  <div class="topline"><span>工作空间 <span class="breadcrumb-slash">/</span> 个人 Worker</span><span class="version-pill">内核 __CFNEW_CORE_VERSION__</span></div>
+  <header class="page-heading"><div class="eyebrow">MAKE IT YOURS</div><h1>你的 Worker，你来定义<span class="heading-dot">.</span></h1><p>配置一次，生成属于你的版本，再到 Cloudflare 完成部署。</p></header>
+  <div class="steps" aria-label="部署流程"><span class="current"><b>01</b>填写设置</span><i></i><span><b>02</b>生成并下载</span><i></i><span><b>03</b>部署到 Cloudflare</span></div>
+  <div class="builder-layout">
+  <form id="buildForm" class="builder-form">
+    <section class="card">
+      <div class="section-heading"><span class="section-number">01</span><div><h2>连接身份</h2><p>新建节点，或沿用现有 Worker 的 UUID。</p></div></div>
+      <div id="importStatus" class="info-banner" hidden></div>
+      <label for="buildUuid">Worker UUID</label>
+      <div class="input-action"><input id="buildUuid" name="uuid" required maxlength="36" autocomplete="off" spellcheck="false"><button id="newUuid" class="button-secondary" type="button">重新生成</button></div>
+      <small>升级已有节点时请保留原 UUID，已有客户端无需重新配置。</small>
+      <label for="buildSeed">个人构建码 <span class="optional">至少 8 个字符</span></label>
+      <div class="input-action"><input id="buildSeed" name="seed" type="password" required minlength="8" maxlength="128" autocomplete="off" spellcheck="false"><button id="showSeed" class="button-secondary" type="button" aria-label="显示个人构建码">显示</button><button id="newSeed" class="button-secondary" type="button">随机生成</button></div>
+      <small>构建码决定代码中的命名。相同版本、设置和构建码生成相同代码；它不是连接密码。</small>
+      <label for="buildPath">自定义管理路径 <span class="optional">可选</span></label>
+      <input id="buildPath" name="path" placeholder="例如 /my-panel" maxlength="2048" autocomplete="off" spellcheck="false">
+    </section>
+    <section class="card">
+      <div class="section-heading"><span class="section-number">02</span><div><h2>连接与配置</h2><p>设置会随下载文件带入，部署后也可通过面板管理。</p></div></div>
+      <span class="field-label">启用协议</span>
+      <div class="protocol-options">
+        <label class="choice-card"><input id="buildEv" type="checkbox" checked><span><strong>VLESS · WS</strong><small>常用客户端兼容</small></span></label>
+        <label class="choice-card"><input id="buildEt" type="checkbox"><span><strong>Trojan · WS</strong><small>支持 Surge 等客户端</small></span></label>
+        <label class="choice-card"><input id="buildEx" type="checkbox"><span><strong>VLESS · XHTTP</strong><small>HTTP/2 · stream-one</small></span></label>
+      </div>
+      <label class="toggle-row" for="buildFreeCpu"><span><strong>Free CPU 保护</strong><small>达到单连接预算后断开，客户端需要重连。默认关闭。</small></span><input id="buildFreeCpu" type="checkbox" role="switch"></label>
+      <details class="advanced-settings"><summary>高级设置 <span>优选地址与出站代理</span></summary>
+        <label for="buildPreferred">优选地址</label><textarea id="buildPreferred" rows="4" maxlength="32768" spellcheck="false" placeholder="每行一个地址，例如 edge.example.com:443#我的节点"></textarea>
+        <label for="buildProxyIp">ProxyIP <span class="optional">可选</span></label><input id="buildProxyIp" maxlength="2048" placeholder="host:port 或 [IPv6]:port" spellcheck="false">
+        <label for="buildProxy">出站代理 <span class="optional">可选</span></label><input id="buildProxy" type="password" maxlength="2048" placeholder="socks5://user:password@host:port" autocomplete="off" spellcheck="false">
+      </details>
+    </section>
+    <section class="card">
+      <div class="section-heading"><span class="section-number">03</span><div><h2>选择下载格式</h2><p>两个格式使用相同的个人 Worker 代码。</p></div></div>
+      <div class="format-options">
+        <label class="choice-card"><input type="radio" name="format" value="worker" checked><span><strong>Worker 源码</strong><small>_worker.js · 粘贴到代码编辑器</small></span><span class="file-badge">JS</span></label>
+        <label class="choice-card"><input type="radio" name="format" value="pages"><span><strong>Pages 部署包</strong><small>Pages.zip · 直接上传压缩包</small></span><span class="file-badge">ZIP</span></label>
+      </div>
+      <button id="downloadWorker" class="button-primary download-button" type="submit"><span>↓</span>生成并下载</button>
+      <p id="buildStatus" class="build-status" role="status" aria-live="polite">由面板后台生成，构建码与配置不写入存储。</p>
+      <div id="buildResult" class="build-result" hidden><strong>文件已生成</strong><dl><div><dt>构建编号</dt><dd id="buildId"></dd></div><div><dt>代码大小</dt><dd id="buildBytes"></dd></div></dl><details><summary>查看 SHA-256 校验值</summary><code id="buildHash"></code></details></div>
+    </section>
+  </form>
+  <aside class="builder-guide">
+    <div class="guide-illustration" aria-hidden="true"><div class="file-art"><span>CF</span><div></div><div></div><div></div><b>your-worker.js</b></div><span class="art-label">BUILT FOR YOU</span></div>
+    <h2>接下来，只差部署</h2>
+    <ol class="deployment-guide"><li><b>上传文件</b><p>Workers：完整替换代码；Pages：直接上传部署包。</p></li><li><b>检查设置</b><p>兼容日期设为 <code>2026-01-20</code>。需要在线保存时绑定 KV，名称为 <code>C</code> 或 <code>c</code>。</p></li><li><b>回到面板连接</b><p>使用部署后的域名和上方 UUID，生成客户端订阅。</p></li></ol>
+    <a class="text-link" href="/">已部署？连接控制台 <span>↗</span></a>
+    <p class="guide-note">个人化构建保持原有协议兼容。代码混淆不等于流量加密，也不保证避免平台限制。下载文件包含你的连接配置，请妥善保管。</p>
+  </aside>
+  </div>
+  <footer class="workspace-footer">CFnew Workspace <span>基于 <a href="https://github.com/byJoey/cfnew" target="_blank" rel="noopener noreferrer">byJoey / CFnew</a> 二次开发</span></footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const newSeed = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), value => value.toString(16).padStart(2,'0')).join('');
+const newUuid = () => {const bytes=crypto.getRandomValues(new Uint8Array(16));bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;const hex=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');return [hex.slice(0,8),hex.slice(8,12),hex.slice(12,16),hex.slice(16,20),hex.slice(20)].join('-');};
+$('buildUuid').value=newUuid();$('buildSeed').value=newSeed();
+$('newUuid').addEventListener('click',()=>{$('buildUuid').value=newUuid();});
+$('newSeed').addEventListener('click',()=>{$('buildSeed').value=newSeed();});
+$('showSeed').addEventListener('click',()=>{const show=$('buildSeed').type==='password';$('buildSeed').type=show?'text':'password';$('showSeed').textContent=show?'隐藏':'显示';$('showSeed').setAttribute('aria-label',show?'隐藏个人构建码':'显示个人构建码');});
+let importedSettings={};
+if(location.hash==='#import')try{
+  const raw=sessionStorage.getItem('cfnew-builder-draft');sessionStorage.removeItem('cfnew-builder-draft');
+  if(raw){const draft=JSON.parse(raw);importedSettings=draft.settings||{};$('buildUuid').value=draft.uuid;
+    for(const [id,key] of [['buildPath','d'],['buildPreferred','yx'],['buildProxyIp','p'],['buildProxy','s']])$(id).value=importedSettings[key]||'';
+    for(const [id,key] of [['buildEv','ev'],['buildEt','et'],['buildEx','ex'],['buildFreeCpu','freeCpu']])$(id).checked=importedSettings[key]==='yes';
+    $('importStatus').textContent='已带入控制台中保存的配置。此处调整只用于下载，不会修改在线 Worker。';$('importStatus').hidden=false;
+  }
+  history.replaceState(null,'','/builder');
+}catch{$('importStatus').textContent='未能带入配置，请手动填写。';$('importStatus').hidden=false;}
+$('buildForm').addEventListener('submit',async event=>{
+  event.preventDefault();const button=$('downloadWorker');if(button.disabled)return;
+  if(!['buildEv','buildEt','buildEx'].some(id=>$(id).checked)){$('buildStatus').textContent='请至少选择一种连接协议。';return;}
+  const format=new FormData(event.currentTarget).get('format');
+  const settings={...importedSettings,d:$('buildPath').value.trim(),yx:$('buildPreferred').value.trim(),p:$('buildProxyIp').value.trim(),s:$('buildProxy').value.trim(),ev:$('buildEv').checked?'yes':'no',et:$('buildEt').checked?'yes':'no',ex:$('buildEx').checked?'yes':'no',freeCpu:$('buildFreeCpu').checked?'yes':'no'};
+  const payload={uuid:$('buildUuid').value.trim(),seed:$('buildSeed').value,format,settings};
+  button.disabled=true;button.textContent='正在生成…';$('buildResult').hidden=true;$('buildStatus').classList.remove('is-error');$('buildStatus').textContent='正在生成个人版本，请稍候…';
+  try{
+    const response=await fetch('/api/builder/download',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!response.ok){const error=await response.json();throw new Error(error.message||'生成失败，请重试');}
+    const blob=await response.blob();const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=format==='pages'?'Pages.zip':'_worker.js';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+    $('buildId').textContent=response.headers.get('X-Build-Id');$('buildBytes').textContent=(Number(response.headers.get('X-Worker-Bytes'))/1024).toFixed(1)+' KiB';$('buildHash').textContent=response.headers.get('X-Worker-SHA256');$('buildResult').hidden=false;$('buildStatus').textContent='下载已准备好。请使用上方 UUID 连接部署后的 Worker。';
+  }catch(error){$('buildStatus').textContent=error.message||'连接失败，请重试';$('buildStatus').classList.add('is-error');}
+  finally{button.disabled=false;button.innerHTML='<span>↓</span>生成并下载';}
+});
+</script>
+</body>
+</html>

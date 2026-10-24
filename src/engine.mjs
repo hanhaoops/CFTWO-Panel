@@ -1958,28 +1958,17 @@ async function 处理订阅值(请求241, 用户240 = null) {
             <title>${翻译值.title}</title>
 
     </head>
-    <body>
-        <div class="matrix-bg"></div>
-        <div class="matrix-code-rain" id="matrixCodeRain"></div>
-            <div class="cp-hud">
-                <span class="cp-hud-line"><span class="cp-hud-label">SYS::</span> ${翻译值.terminal}</span>
-                <span class="cp-hud-line"><span class="cp-hud-label">NODE::</span> NIGHT_CITY</span>
-                <span class="cp-hud-line"><span class="cp-hud-label">LINK::</span> SECURE / ENC</span>
-            </div>
-            <div class="cp-lang-wrapper">
-                <span class="cp-lang-tag">LANG_</span>
-                <select id="languageSelector" onchange="切换语言(this.value)">
-                    <option value="zh" ${!是否值236 ? 'selected' : ''}>🇨🇳 中文</option>
-                    <option value="fa" ${是否值236 ? 'selected' : ''}>🇮🇷 فارسی</option>
-                </select>
-            </div>
-            <button type="button" id="cpFxToggle" class="cp-fx-toggle" onclick="window.切换页面特效()" title="${是否值236 ? 'تغییر افکت‌های صفحه' : '切换页面特效'}" aria-label="FX toggle">
-                <span class="cp-fx-dot" aria-hidden="true"></span>
-                <span id="cpFxLabel">FX: ON</span>
-            </button>
+    <body class="workspace console-page">
+        <aside class="sidebar">
+          <a class="wordmark" href="/"><span class="logo-mark">C</span> CFnew<span class="edition">WORKSPACE</span></a>
+          <div class="nav-caption">工作空间</div>
+          <nav aria-label="主导航"><a class="active" href="#"><span class="nav-icon">▦</span>连接控制台</a><a href="/builder"><span class="nav-icon">◇</span>个人 Worker<span class="nav-tag">NEW</span></a></nav>
+          <div class="sidebar-bottom">独立部署，自主管理<br><small>基于 CFnew · byJoey</small></div>
+        </aside>
+        <div class="console-topline"><span>工作空间 / 连接控制台</span><select id="languageSelector" aria-label="语言" onchange="切换语言(this.value)"><option value="zh" ${!是否值236 ? 'selected' : ''}>中文</option><option value="fa" ${是否值236 ? 'selected' : ''}>فارسی</option></select></div>
         <div class="container">
             <div class="header">
-                    <h1 class="title cp-glitch" data-text="${翻译值.title}">${翻译值.title}</h1>
+                    <h1 class="title">${翻译值.title}</h1>
                     <p class="subtitle">${翻译值.subtitle}</p>
             </div>
             <div class="card">
@@ -1995,33 +1984,33 @@ async function 处理订阅值(请求241, 用户240 = null) {
                     <button class="client-btn" onclick="生成客户端链接(atob('djJyYXk='), 'V2RAYNG')">V2RAYNG</button>
                     <button class="client-btn" onclick="生成客户端链接(atob('djJyYXk='), 'NEKORAY')">NEKORAY</button>
                     <button class="client-btn" onclick="生成客户端链接(atob('djJyYXk='), 'Shadowrocket')">Shadowrocket</button>
-                    <button class="client-btn" id="jkClientBtn" style="${启用家宽链式 ? '' : 'display: none;'}" onclick="生成客户端链接('vg', '${翻译值.jkClient}')">${翻译值.jkClient}</button>
+                    <button class="client-btn" id="jkClientBtn" style="${启用家宽链式 ? '' : 'display: none; '}" onclick="生成客户端链接('vg', '${翻译值.jkClient}')">${翻译值.jkClient}</button>
                 </div>
                 <div class="subscription-url" id="clientSubscriptionUrl"></div>
             </div>
             <div class="card">
                     <h2 class="card-title">${翻译值.systemStatus}</h2>
-                <div id="systemStatus" style="margin: 20px 0; padding: 15px; background: rgba(8, 4, 28, 0.8); border: 2px solid #00f0ff; box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1); position: relative; overflow: hidden;">
-                        <div style="color: #00f0ff; margin-bottom: 15px; font-weight: bold; text-shadow: 0 0 5px #00f0ff;">[ ${翻译值.checking} ]</div>
-                        <div id="regionStatus" style="margin: 8px 0; color: #00f0ff; font-family: 'Courier New', monospace; text-shadow: 0 0 3px #00f0ff;">${翻译值.workerRegion}${翻译值.checking}</div>
-                        <div id="geoInfo" style="margin: 8px 0; color: #7aa9c4; font-family: 'Courier New', monospace; font-size: 0.9rem; text-shadow: 0 0 3px #7aa9c4;">${翻译值.detectionMethod}${翻译值.checking}</div>
-                        <div id="backupStatus" style="margin: 8px 0; color: #00f0ff; font-family: 'Courier New', monospace; text-shadow: 0 0 3px #00f0ff;">${翻译值.proxyIPStatus}${翻译值.checking}</div>
-                        <div id="currentIP" style="margin: 8px 0; color: #00f0ff; font-family: 'Courier New', monospace; text-shadow: 0 0 3px #00f0ff;">${翻译值.currentIP}${翻译值.checking}</div>
-                        <div id="echStatus" style="margin: 8px 0; color: #00f0ff; font-family: 'Courier New', monospace; text-shadow: 0 0 3px #00f0ff; font-size: 0.9rem;">ECH状态: ${翻译值.checking}</div>
-                        <div id="regionMatch" style="margin: 8px 0; color: #00f0ff; font-family: 'Courier New', monospace; text-shadow: 0 0 3px #00f0ff;">${翻译值.regionMatch}${翻译值.checking}</div>
-                        <div id="selectionLogic" style="margin: 8px 0; color: #7aa9c4; font-family: 'Courier New', monospace; font-size: 0.9rem; text-shadow: 0 0 3px #7aa9c4;">${翻译值.selectionLogic}${翻译值.selectionLogicText}</div>
+                <div id="systemStatus" style="margin: 20px 0; padding: 15px; position: relative; overflow: hidden">
+                        <div style="margin-bottom: 15px; font-weight: bold">[ ${翻译值.checking} ]</div>
+                        <div id="regionStatus" style="margin: 8px 0">${翻译值.workerRegion}${翻译值.checking}</div>
+                        <div id="geoInfo" style="margin: 8px 0; font-size: 0.9rem">${翻译值.detectionMethod}${翻译值.checking}</div>
+                        <div id="backupStatus" style="margin: 8px 0">${翻译值.proxyIPStatus}${翻译值.checking}</div>
+                        <div id="currentIP" style="margin: 8px 0">${翻译值.currentIP}${翻译值.checking}</div>
+                        <div id="echStatus" style="margin: 8px 0; font-size: 0.9rem">ECH状态: ${翻译值.checking}</div>
+                        <div id="regionMatch" style="margin: 8px 0">${翻译值.regionMatch}${翻译值.checking}</div>
+                        <div id="selectionLogic" style="margin: 8px 0; font-size: 0.9rem">${翻译值.selectionLogic}${翻译值.selectionLogicText}</div>
                 </div>
             </div>
-            <div class="card" id="configCard" style="display: none;">
+            <div class="card" id="configCard" style="display: none">
                     <h2 class="card-title">${翻译值.configManagement}</h2>
-                <div id="kvStatus" style="margin-bottom: 20px; padding: 10px; background: rgba(8, 4, 28, 0.8); border: 1px solid #00f0ff; color: #00f0ff;">
+                <div id="kvStatus" style="margin-bottom: 20px; padding: 10px">
                     ${翻译值.kvStatusChecking}
                 </div>
-                <div id="configContent" style="display: none;">
-                    <form id="regionForm" style="margin-bottom: 20px;">
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.specifyRegion}</label>
-                            <select id="wkRegion" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                <div id="configContent" style="display: none">
+                    <form id="regionForm" style="margin-bottom: 20px">
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.specifyRegion}</label>
+                            <select id="wkRegion" style="width: 100%; padding: 12px; font-size: 14px">
                                     <option value="">${翻译值.autoDetect}</option>
                                     <option value="HK">${翻译值.regionNames.HK}</option>
                                     <option value="US">${翻译值.regionNames.US}</option>
@@ -2034,10 +2023,10 @@ async function 处理订阅值(请求241, 用户240 = null) {
                                     <option value="FI">${翻译值.regionNames.FI}</option>
                                     <option value="GB">${翻译值.regionNames.GB}</option>
                             </select>
-                                <small id="wkRegionHint" style="color: #7aa9c4; font-size: 0.85rem; display: none;">⚠️ ${翻译值.customIPDisabledHint}</small>
+                                <small id="wkRegionHint" style="font-size: 0.85rem; display: none">⚠️ ${翻译值.customIPDisabledHint}</small>
                         </div>
                     </form>
-                    <form id="otherConfigForm" style="margin-bottom: 20px;">
+                    <form id="otherConfigForm" style="margin-bottom: 20px">
                         <div class="cp-cpu-setting">
                             <label class="cp-cpu-switch" for="freeCpu">
                                 <input type="checkbox" id="freeCpu" aria-describedby="freeCpuHint" ${supportsFreeCpu ? '' : 'disabled'}>
@@ -2045,48 +2034,48 @@ async function 处理订阅值(请求241, 用户240 = null) {
                             </label>
                             <small id="freeCpuHint">${supportsFreeCpu ? '单连接上下载合计最多 384 KiB 或 96 个数据块，超过就断开。客户端需自行重连，下载和视频可能中断。保存后对新连接生效，不能保证零超限。' : '当前内核不支持，请先更新配套内核。'}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.protocolSelection}</label>
-                            <div style="padding: 15px; background: rgba(15, 3, 40, 0.6); border: 1px solid #00f0ff; border-radius: 5px;">
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                        <input type="checkbox" id="ev" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1.1rem;">${翻译值.enableProtoV}</span>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.protocolSelection}</label>
+                            <div style="padding: 15px; border-radius: 5px">
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                        <input type="checkbox" id="ev" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1.1rem">${翻译值.enableProtoV}</span>
                                     </label>
                                 </div>
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                        <input type="checkbox" id="et" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1.1rem;">${翻译值.enableProtoT}</span>
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                        <input type="checkbox" id="et" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1.1rem">${翻译值.enableProtoT}</span>
                                     </label>
                                 </div>
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                        <input type="checkbox" id="ex" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1.1rem;">${翻译值.enableXhttp}</span>
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                        <input type="checkbox" id="ex" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1.1rem">${翻译值.enableXhttp}</span>
                                     </label>
                                 </div>
-                                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 240, 255, 0.3);">
-                                    <div style="margin-bottom: 10px;">
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                            <input type="checkbox" id="ech" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                                <span style="font-size: 1.1rem;">${翻译值.enableECH}</span>
+                                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 240, 255, 0.3)">
+                                    <div style="margin-bottom: 10px">
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                            <input type="checkbox" id="ech" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                                <span style="font-size: 1.1rem">${翻译值.enableECH}</span>
                                         </label>
-                                        <small style="color: #7aa9c4; font-size: 0.8rem; display: block; margin-top: 5px; margin-left: 26px;">${翻译值.enableECHHint}</small>
+                                        <small style="font-size: 0.8rem; display: block; margin-top: 5px; margin-left: 26px">${翻译值.enableECHHint}</small>
                                     </div>
-                                    <div style="margin-top: 15px; margin-bottom: 10px;">
-                                        <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-size: 0.95rem;">${翻译值.customDNS}</label>
-                                        <input type="text" id="customDNS" placeholder="${翻译值.customDNSPlaceholder}" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
-                                        <small style="color: #7aa9c4; font-size: 0.8rem; display: block; margin-top: 5px;">${翻译值.customDNSHint}</small>
+                                    <div style="margin-top: 15px; margin-bottom: 10px">
+                                        <label style="display: block; margin-bottom: 8px; font-size: 0.95rem">${翻译值.customDNS}</label>
+                                        <input type="text" id="customDNS" placeholder="${翻译值.customDNSPlaceholder}" style="width: 100%; padding: 10px; font-size: 13px">
+                                        <small style="font-size: 0.8rem; display: block; margin-top: 5px">${翻译值.customDNSHint}</small>
                                     </div>
-                                    <div style="margin-bottom: 10px;">
-                                        <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-size: 0.95rem;">${翻译值.customECHDomain}</label>
-                                        <input type="text" id="customECHDomain" placeholder="${翻译值.customECHDomainPlaceholder}" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
-                                        <small style="color: #7aa9c4; font-size: 0.8rem; display: block; margin-top: 5px;">${翻译值.customECHDomainHint}</small>
+                                    <div style="margin-bottom: 10px">
+                                        <label style="display: block; margin-bottom: 8px; font-size: 0.95rem">${翻译值.customECHDomain}</label>
+                                        <input type="text" id="customECHDomain" placeholder="${翻译值.customECHDomainPlaceholder}" style="width: 100%; padding: 10px; font-size: 13px">
+                                        <small style="font-size: 0.8rem; display: block; margin-top: 5px">${翻译值.customECHDomainHint}</small>
                                     </div>
-                                    <div style="margin-bottom: 10px;">
-                                        <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-size: 0.95rem;">${翻译值.alpn}</label>
-                                        <select id="alpn" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
+                                    <div style="margin-bottom: 10px">
+                                        <label style="display: block; margin-bottom: 8px; font-size: 0.95rem">${翻译值.alpn}</label>
+                                        <select id="alpn" style="width: 100%; padding: 10px; font-size: 13px">
                                             <option value="">${翻译值.alpnDefault}</option>
                                             <option value="h3">h3</option>
                                             <option value="h2">h2</option>
@@ -2095,264 +2084,264 @@ async function 处理订阅值(请求241, 用户240 = null) {
                                             <option value="h2,http/1.1">h2,http/1.1</option>
                                             <option value="h3,h2,http/1.1">h3,h2,http/1.1</option>
                                         </select>
-                                        <small style="color: #7aa9c4; font-size: 0.8rem; display: block; margin-top: 5px;">${翻译值.alpnHint}</small>
+                                        <small style="font-size: 0.8rem; display: block; margin-top: 5px">${翻译值.alpnHint}</small>
                                     </div>
                                 </div>
-                                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 240, 255, 0.3);">
-                                        <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-size: 0.95rem;">${翻译值.altPassword}</label>
-                                        <input type="text" id="tp" placeholder="${翻译值.altPasswordPlaceholder}" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
-                                        <small style="color: #7aa9c4; font-size: 0.8rem; display: block; margin-top: 5px;">${翻译值.altPasswordHint}</small>
+                                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 240, 255, 0.3)">
+                                        <label style="display: block; margin-bottom: 8px; font-size: 0.95rem">${翻译值.altPassword}</label>
+                                        <input type="text" id="tp" placeholder="${翻译值.altPasswordPlaceholder}" style="width: 100%; padding: 10px; font-size: 13px">
+                                        <small style="font-size: 0.8rem; display: block; margin-top: 5px">${翻译值.altPasswordHint}</small>
                                 </div>
-                                    <small style="color: #7aa9c4; font-size: 0.85rem; display: block; margin-top: 10px;">${翻译值.protocolHint}</small>
+                                    <small style="font-size: 0.85rem; display: block; margin-top: 10px">${翻译值.protocolHint}</small>
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.customHomepage}</label>
-                                <input type="text" id="customHomepage" placeholder="${翻译值.customHomepagePlaceholder}" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.customHomepageHint}</small>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.customHomepage}</label>
+                                <input type="text" id="customHomepage" placeholder="${翻译值.customHomepagePlaceholder}" style="width: 100%; padding: 12px; font-size: 14px">
+                                <small style="font-size: 0.85rem">${翻译值.customHomepageHint}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.customPath}</label>
-                                <input type="text" id="customPath" placeholder="${是否值236 ? 'مثال: /mypath یا خالی بگذارید تا از UUID استفاده شود' : '例如: /mypath 或留空使用 UUID'}" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${是否值236 ? 解码64('2YXYs9uM2LEg2KfYtNiq2LHYp9qpINiz2YHYp9ix2LTbjC4g2Kfar9ixINiu2KfZhNuMINio2q/YsNin2LHbjNivINin2LIgVVVJRCDYqNmHINi52YbZiNin2YYg2YXYs9uM2LEg2KfYs9iq2YHYp9iv2Ycg2YXbjOKAjNi02YjYry4=') : 解码64('6Ieq5a6a5LmJ6K6i6ZiF6Lev5b6E44CC55WZ56m65YiZ5L2/55SoIFVVSUQg5L2c5Li66Lev5b6E44CC')}</small>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.customPath}</label>
+                                <input type="text" id="customPath" placeholder="${是否值236 ? 'مثال: /mypath یا خالی بگذارید تا از UUID استفاده شود' : '例如: /mypath 或留空使用 UUID'}" style="width: 100%; padding: 12px; font-size: 14px">
+                                <small style="font-size: 0.85rem">${是否值236 ? 解码64('2YXYs9uM2LEg2KfYtNiq2LHYp9qpINiz2YHYp9ix2LTbjC4g2Kfar9ixINiu2KfZhNuMINio2q/YsNin2LHbjNivINin2LIgVVVJRCDYqNmHINi52YbZiNin2YYg2YXYs9uM2LEg2KfYs9iq2YHYp9iv2Ycg2YXbjOKAjNi02YjYry4=') : 解码64('6Ieq5a6a5LmJ6K6i6ZiF6Lev5b6E44CC55WZ56m65YiZ5L2/55SoIFVVSUQg5L2c5Li66Lev5b6E44CC')}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.customIP}</label>
-                                <input type="text" id="customIP" placeholder="${是否值236 ? 'مثال: 1.2.3.4:443' : '例如: 1.2.3.4:443'}" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${是否值236 ? 解码64('2KLYr9ix2LMg2Ygg2b7ZiNix2KogUHJveHlJUCDYs9mB2KfYsdi024w=') : 解码64('6Ieq5a6a5LmJUHJveHlJUOWcsOWdgOWSjOerr+WPow==')}</small>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.customIP}</label>
+                                <input type="text" id="customIP" placeholder="${是否值236 ? 'مثال: 1.2.3.4:443' : '例如: 1.2.3.4:443'}" style="width: 100%; padding: 12px; font-size: 14px">
+                                <small style="font-size: 0.85rem">${是否值236 ? 解码64('2KLYr9ix2LMg2Ygg2b7ZiNix2KogUHJveHlJUCDYs9mB2KfYsdi024w=') : 解码64('6Ieq5a6a5LmJUHJveHlJUOWcsOWdgOWSjOerr+WPow==')}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.preferredIPs}</label>
-                                <textarea id="yx" rows="8" spellcheck="false" placeholder="104.16.1.1:443#日本节点&#10;[2606:4700::1111]:443#IPv6节点&#10;example.com:8443#域名节点" style="width: 100%; min-height: 180px; resize: vertical; line-height: 1.6; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;"></textarea>
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${是否值236 ? 'فرمت: IP:پورت#نام گره یا IP:پورت (بدون # از نام پیش‌فرض استفاده می‌شود). پشتیبانی از چندین مورد، با خط جدید یا کاما جدا می‌شوند. <span style="color: #ffb400;">IP های اضافه شده از طریق API به طور خودکار در اینجا نمایش داده می‌شوند.</span>' : '格式: IP:端口#节点名称 或 IP:端口 (无#则使用默认名称)。每行一个，也支持英文逗号分隔。<span style="color: #ffb400;">API添加的IP会自动显示在这里。</span>'}</small>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.preferredIPs}</label>
+                                <textarea id="yx" rows="8" spellcheck="false" placeholder="104.16.1.1:443#日本节点&#10;[2606:4700::1111]:443#IPv6节点&#10;example.com:8443#域名节点" style="width: 100%; min-height: 180px; resize: vertical; line-height: 1.6; padding: 12px; font-size: 14px"></textarea>
+                                <small style="font-size: 0.85rem">${是否值236 ? 'فرمت: IP:پورت#نام گره یا IP:پورت (بدون # از نام پیش‌فرض استفاده می‌شود). پشتیبانی از چندین مورد، با خط جدید یا کاما جدا می‌شوند. <span >IP های اضافه شده از طریق API به طور خودکار در اینجا نمایش داده می‌شوند.</span>' : '格式: IP:端口#节点名称 或 IP:端口 (无#则使用默认名称)。每行一个，也支持英文逗号分隔。<span >API添加的IP会自动显示在这里。</span>'}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.preferredIPsURL}</label>
-                                <input type="text" id="yxURL" placeholder="${是否值236 ? 'URL منبع لیست IP ترجیحی را وارد کنید' : '输入优选IP列表来源URL'}" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${是否值236 ? 'URL منبع لیست IP ترجیحی سفارشی، اگر خالی بگذارید از آدرس پیش‌فرض استفاده می‌شود' : '自定义优选IP列表来源URL，留空则使用默认地址'}</small>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.preferredIPsURL}</label>
+                                <input type="text" id="yxURL" placeholder="${是否值236 ? 'URL منبع لیست IP ترجیحی را وارد کنید' : '输入优选IP列表来源URL'}" style="width: 100%; padding: 12px; font-size: 14px">
+                                <small style="font-size: 0.85rem">${是否值236 ? 'URL منبع لیست IP ترجیحی سفارشی، اگر خالی بگذارید از آدرس پیش‌فرض استفاده می‌شود' : '自定义优选IP列表来源URL，留空则使用默认地址'}</small>
                         </div>
                         
-                        <div style="margin-bottom: 20px; padding: 15px; background: rgba(20, 5, 50, 0.6); border: 2px solid #7aa9c4; border-radius: 8px;">
-                            <h4 style="color: #00f0ff; margin: 0 0 15px 0; font-size: 1.1rem; text-shadow: 0 0 5px #00f0ff;">⚡ ${翻译值.latencyTest}</h4><small style="color:#7aa9c4">检测可用性；延迟按面板服务器位置测得。</small>
-                            <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center;">
-                                <div style="min-width: 120px;">
-                                    <label style="display: block; margin-bottom: 5px; color: #00f0ff; font-size: 0.9rem;">${翻译值.ipSource}</label>
-                                    <select id="ipSourceSelect" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px; cursor: pointer;">
+                        <div style="margin-bottom: 20px; padding: 15px; border-radius: 8px">
+                            <h4 style="margin: 0 0 15px 0; font-size: 1.1rem">⚡ ${翻译值.latencyTest}</h4><small >检测可用性；延迟按面板服务器位置测得。</small>
+                            <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center">
+                                <div style="min-width: 120px">
+                                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem">${翻译值.ipSource}</label>
+                                    <select id="ipSourceSelect" style="width: 100%; padding: 10px; font-size: 13px; cursor: pointer">
                                         <option value="manual">${翻译值.manualInput}</option>
                                         <option value="cfRandom">${翻译值.cfRandomIP}</option>
                                         <option value="urlFetch">${翻译值.urlFetch}</option>
                                     </select>
                                 </div>
-                                <div style="width: 100px;">
-                                    <label style="display: block; margin-bottom: 5px; color: #00f0ff; font-size: 0.9rem;">${翻译值.latencyTestPort}</label>
-                                    <input type="number" id="latencyTestPort" value="443" min="1" max="65535" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
+                                <div style="width: 100px">
+                                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem">${翻译值.latencyTestPort}</label>
+                                    <input type="number" id="latencyTestPort" value="443" min="1" max="65535" style="width: 100%; padding: 10px; font-size: 13px">
                                 </div>
-                                <div id="randomCountDiv" style="width: 100px; display: none;">
-                                    <label style="display: block; margin-bottom: 5px; color: #00f0ff; font-size: 0.9rem;">${翻译值.randomCount}</label>
-                                    <input type="number" id="randomIPCount" value="20" min="1" max="100" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
+                                <div id="randomCountDiv" style="width: 100px; display: none">
+                                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem">${翻译值.randomCount}</label>
+                                    <input type="number" id="randomIPCount" value="20" min="1" max="100" style="width: 100%; padding: 10px; font-size: 13px">
                                 </div>
-                                <div style="width: 80px;">
-                                    <label style="display: block; margin-bottom: 5px; color: #00f0ff; font-size: 0.9rem;">${是否值236 ? 'رشته‌ها' : '线程'}</label>
-                                    <input type="number" id="testThreads" value="5" min="1" max="50" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
-                                </div>
-                            </div>
-                            <div id="manualInputDiv" style="margin-bottom: 10px;">
-                                <label style="display: block; margin-bottom: 5px; color: #00f0ff; font-size: 0.9rem;">${翻译值.latencyTestIP}</label>
-                                <input type="text" id="latencyTestInput" placeholder="${翻译值.latencyTestIPPlaceholder}" style="width: 100%; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
-                            </div>
-                            <div id="urlFetchDiv" style="margin-bottom: 10px; display: none;">
-                                <label style="display: block; margin-bottom: 5px; color: #00f0ff; font-size: 0.9rem;">${翻译值.fetchURL}</label>
-                                <div style="display: flex; gap: 8px;">
-                                    <input type="text" id="fetchURLInput" placeholder="${翻译值.fetchURLPlaceholder}" style="flex: 1; padding: 10px; background: rgba(0, 0, 0, 0.8); border: 1px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 13px;">
-                                    <button type="button" id="fetchIPBtn" style="background: rgba(0, 200, 255, 0.2); border: 1px solid #00aaff; padding: 8px 16px; color: #00aaff; font-family: 'Courier New', monospace; cursor: pointer; white-space: nowrap;">⬇ ${翻译值.fetchIP}</button>
+                                <div style="width: 80px">
+                                    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem">${是否值236 ? 'رشته‌ها' : '线程'}</label>
+                                    <input type="number" id="testThreads" value="5" min="1" max="50" style="width: 100%; padding: 10px; font-size: 13px">
                                 </div>
                             </div>
-                            <div id="cfRandomDiv" style="margin-bottom: 10px; display: none;">
-                                <button type="button" id="generateCFIPBtn" style="background: rgba(0, 240, 255, 0.15); border: 1px solid #00f0ff; padding: 10px 20px; color: #00f0ff; font-family: 'Courier New', monospace; cursor: pointer; width: 100%; transition: all 0.3s;">🎲 ${翻译值.generateIP}</button>
+                            <div id="manualInputDiv" style="margin-bottom: 10px">
+                                <label style="display: block; margin-bottom: 5px; font-size: 0.9rem">${翻译值.latencyTestIP}</label>
+                                <input type="text" id="latencyTestInput" placeholder="${翻译值.latencyTestIPPlaceholder}" style="width: 100%; padding: 10px; font-size: 13px">
                             </div>
-                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                                <button type="button" id="startLatencyTest" style="background: rgba(0, 240, 255, 0.2); border: 1px solid #00f0ff; padding: 8px 16px; color: #00f0ff; font-family: 'Courier New', monospace; cursor: pointer; transition: all 0.3s;">▶ ${翻译值.startTest}</button>
-                                <button type="button" id="stopLatencyTest" style="background: rgba(255, 0, 0, 0.2); border: 1px solid #ff3860; padding: 8px 16px; color: #ff3860; font-family: 'Courier New', monospace; cursor: pointer; display: none; transition: all 0.3s;">⏹ ${翻译值.stopTest}</button>
+                            <div id="urlFetchDiv" style="margin-bottom: 10px; display: none">
+                                <label style="display: block; margin-bottom: 5px; font-size: 0.9rem">${翻译值.fetchURL}</label>
+                                <div style="display: flex; gap: 8px">
+                                    <input type="text" id="fetchURLInput" placeholder="${翻译值.fetchURLPlaceholder}" style="flex: 1; padding: 10px; font-size: 13px">
+                                    <button type="button" id="fetchIPBtn" style="padding: 8px 16px; cursor: pointer; white-space: nowrap">⬇ ${翻译值.fetchIP}</button>
+                                </div>
                             </div>
-                            <div id="latencyTestStatus" style="color: #7aa9c4; font-size: 0.9rem; margin-bottom: 10px; display: none;"></div>
-                            <div id="latencyTestResults" style="max-height: 250px; overflow-y: auto; display: none;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <span style="color: #00f0ff; font-weight: bold;">${翻译值.testResult}</span>
-                                    <div style="display: flex; gap: 8px;">
-                                        <button type="button" id="selectAllResults" style="background: transparent; border: 1px solid #7aa9c4; padding: 4px 10px; color: #7aa9c4; font-size: 0.8rem; cursor: pointer;">${翻译值.selectAll}</button>
-                                        <button type="button" id="deselectAllResults" style="background: transparent; border: 1px solid #7aa9c4; padding: 4px 10px; color: #7aa9c4; font-size: 0.8rem; cursor: pointer;">${翻译值.deselectAll}</button>
+                            <div id="cfRandomDiv" style="margin-bottom: 10px; display: none">
+                                <button type="button" id="generateCFIPBtn" style="padding: 10px 20px; cursor: pointer; width: 100%; transition: all 0.3s">🎲 ${翻译值.generateIP}</button>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px">
+                                <button type="button" id="startLatencyTest" style="padding: 8px 16px; cursor: pointer; transition: all 0.3s">▶ ${翻译值.startTest}</button>
+                                <button type="button" id="stopLatencyTest" style="padding: 8px 16px; cursor: pointer; display: none; transition: all 0.3s">⏹ ${翻译值.stopTest}</button>
+                            </div>
+                            <div id="latencyTestStatus" style="font-size: 0.9rem; margin-bottom: 10px; display: none"></div>
+                            <div id="latencyTestResults" style="max-height: 250px; overflow-y: auto; display: none">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px">
+                                    <span style="font-weight: bold">${翻译值.testResult}</span>
+                                    <div style="display: flex; gap: 8px">
+                                        <button type="button" id="selectAllResults" style="padding: 4px 10px; font-size: 0.8rem; cursor: pointer">${翻译值.selectAll}</button>
+                                        <button type="button" id="deselectAllResults" style="padding: 4px 10px; font-size: 0.8rem; cursor: pointer">${翻译值.deselectAll}</button>
                                     </div>
                                 </div>
-                                <div id="cityFilterContainer" style="margin-bottom: 10px; padding: 10px; background: rgba(15, 3, 40, 0.6); border: 1px solid #7aa9c4; border-radius: 4px; display: none;">
-                                    <div style="margin-bottom: 8px;">
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff; font-size: 0.9rem;">
-                                            <input type="radio" name="cityFilterMode" value="all" checked style="margin-right: 6px; width: 16px; height: 16px; cursor: pointer;">
+                                <div id="cityFilterContainer" style="margin-bottom: 10px; padding: 10px; border-radius: 4px; display: none">
+                                    <div style="margin-bottom: 8px">
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer; font-size: 0.9rem">
+                                            <input type="radio" name="cityFilterMode" value="all" checked style="margin-right: 6px; width: 16px; height: 16px; cursor: pointer">
                                             <span>${是否值236 ? '全部城市' : '全部城市'}</span>
                                         </label>
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff; font-size: 0.9rem; margin-left: 15px;">
-                                            <input type="radio" name="cityFilterMode" value="fastest10" style="margin-right: 6px; width: 16px; height: 16px; cursor: pointer;">
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer; font-size: 0.9rem; margin-left: 15px">
+                                            <input type="radio" name="cityFilterMode" value="fastest10" style="margin-right: 6px; width: 16px; height: 16px; cursor: pointer">
                                             <span>${是否值236 ? '只选择最快的10个' : '只选择最快的10个'}</span>
                                         </label>
                                     </div>
-                                    <div id="cityCheckboxesContainer" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 80px; overflow-y: auto; padding: 5px;"></div>
+                                    <div id="cityCheckboxesContainer" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 80px; overflow-y: auto; padding: 5px"></div>
                                 </div>
-                                <div id="latencyResultsList" style="background: rgba(0, 0, 0, 0.5); border: 1px solid #004400; border-radius: 4px; padding: 10px;"></div>
-                                <div style="margin-top: 10px; display: flex; gap: 10px;">
-                                    <button type="button" id="overwriteSelectedToYx" style="flex: 1; background: rgba(0, 220, 130, 0.3); border: 1px solid #00f0ff; padding: 10px 20px; color: #00f0ff; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; transition: all 0.3s;">${是否值236 ? '覆盖添加' : '覆盖添加'}</button>
-                                    <button type="button" id="appendSelectedToYx" style="flex: 1; background: rgba(0, 178, 110, 0.3); border: 1px solid #7aa9c4; padding: 10px 20px; color: #7aa9c4; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; transition: all 0.3s;">${是否值236 ? '追加添加' : '追加添加'}</button>
+                                <div id="latencyResultsList" style="border-radius: 4px; padding: 10px"></div>
+                                <div style="margin-top: 10px; display: flex; gap: 10px">
+                                    <button type="button" id="overwriteSelectedToYx" style="flex: 1; padding: 10px 20px; font-weight: bold; cursor: pointer; transition: all 0.3s">${是否值236 ? '覆盖添加' : '覆盖添加'}</button>
+                                    <button type="button" id="appendSelectedToYx" style="flex: 1; padding: 10px 20px; font-weight: bold; cursor: pointer; transition: all 0.3s">${是否值236 ? '追加添加' : '追加添加'}</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.socks5Config}</label>
-                                <input type="text" id="socksConfig" placeholder="${是否值236 ? 解码64('2YXYq9in2YQ6IHVzZXI6cGFzc0Bob3N0OnBvcnQg24zYpyBodHRwOi8vdXNlcjpwYXNzQGhvc3Q6cG9ydA==') : 解码64('5L6L5aaCOiB1c2VyOnBhc3NAaG9zdDpwb3J0IOaIliBodHRwOi8vdXNlcjpwYXNzQGhvc3Q6cG9ydA==')}" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${是否值236 ? 解码64('2KLYr9ix2LMg2b7YsdmI2qnYs9uMINiu2LHZiNis24wg2KjYsdin24wg2KfZhtiq2YLYp9mEINiq2YXYp9mFINiq2LHYp9mB24zaqSDYrtix2YjYrNuMLiDYqNiv2YjZhiDZvtuM2LTZiNmG2K8g2KjZhyDYtdmI2LHYqiBzNSDYr9ixINmG2LjYsSDar9ix2YHYqtmHINmF24zigIzYtNmI2K8=') : 解码64('5Ye656uZ5Luj55CG5Zyw5Z2A77yM55So5LqO6L2s5Y+R5omA5pyJ5Ye656uZ5rWB6YeP44CC5LiN5YaZ5YmN57yA6buY6K6k5oyJIHM1IOWkhOeQhg==')}</small>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.socks5Config}</label>
+                                <input type="text" id="socksConfig" placeholder="${是否值236 ? 解码64('2YXYq9in2YQ6IHVzZXI6cGFzc0Bob3N0OnBvcnQg24zYpyBodHRwOi8vdXNlcjpwYXNzQGhvc3Q6cG9ydA==') : 解码64('5L6L5aaCOiB1c2VyOnBhc3NAaG9zdDpwb3J0IOaIliBodHRwOi8vdXNlcjpwYXNzQGhvc3Q6cG9ydA==')}" style="width: 100%; padding: 12px; font-size: 14px">
+                                <small style="font-size: 0.85rem">${是否值236 ? 解码64('2KLYr9ix2LMg2b7YsdmI2qnYs9uMINiu2LHZiNis24wg2KjYsdin24wg2KfZhtiq2YLYp9mEINiq2YXYp9mFINiq2LHYp9mB24zaqSDYrtix2YjYrNuMLiDYqNiv2YjZhiDZvtuM2LTZiNmG2K8g2KjZhyDYtdmI2LHYqiBzNSDYr9ixINmG2LjYsSDar9ix2YHYqtmHINmF24zigIzYtNmI2K8=') : 解码64('5Ye656uZ5Luj55CG5Zyw5Z2A77yM55So5LqO6L2s5Y+R5omA5pyJ5Ye656uZ5rWB6YeP44CC5LiN5YaZ5YmN57yA6buY6K6k5oyJIHM1IOWkhOeQhg==')}</small>
                         </div>
                     </form>
 
-                    <h3 style="color: #00f0ff; margin: 20px 0 15px 0; font-size: 1.2rem;">${翻译值.advancedControl}</h3>
-                    <form id="advancedConfigForm" style="margin-bottom: 20px;">
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.subscriptionConverter}</label>
-                                <input type="text" id="scu" placeholder="${翻译值.subscriptionConverterPlaceholder}" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.subscriptionConverterHint}</small>
+                    <h3 style="margin: 20px 0 15px 0; font-size: 1.2rem">${翻译值.advancedControl}</h3>
+                    <form id="advancedConfigForm" style="margin-bottom: 20px">
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.subscriptionConverter}</label>
+                                <input type="text" id="scu" placeholder="${翻译值.subscriptionConverterPlaceholder}" style="width: 100%; padding: 12px; font-size: 14px">
+                                <small style="font-size: 0.85rem">${翻译值.subscriptionConverterHint}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.builtinPreferred}</label>
-                            <div style="padding: 15px; background: rgba(15, 3, 40, 0.6); border: 1px solid #00f0ff; border-radius: 5px;">
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                        <input type="checkbox" id="ena" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1.1rem;">${翻译值.enableNativeAddress}</span>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.builtinPreferred}</label>
+                            <div style="padding: 15px; border-radius: 5px">
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                        <input type="checkbox" id="ena" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1.1rem">${翻译值.enableNativeAddress}</span>
                                     </label>
                                 </div>
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                        <input type="checkbox" id="epd" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1.1rem;">${翻译值.enablePreferredDomain}</span>
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                        <input type="checkbox" id="epd" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1.1rem">${翻译值.enablePreferredDomain}</span>
                                     </label>
                                 </div>
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                        <input type="checkbox" id="epi" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1.1rem;">${翻译值.enablePreferredIP}</span>
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                        <input type="checkbox" id="epi" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1.1rem">${翻译值.enablePreferredIP}</span>
                                     </label>
                                 </div>
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                        <input type="checkbox" id="egi" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1.1rem;">${翻译值.enableGitHubPreferred}</span>
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                        <input type="checkbox" id="egi" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1.1rem">${翻译值.enableGitHubPreferred}</span>
                                     </label>
                                 </div>
-                                    <small style="color: #7aa9c4; font-size: 0.85rem; display: block; margin-top: 10px;">${翻译值.builtinPreferredHint}</small>
+                                    <small style="font-size: 0.85rem; display: block; margin-top: 10px">${翻译值.builtinPreferredHint}</small>
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.jkSection}</label>
-                            <div style="padding: 15px; background: rgba(15, 3, 40, 0.6); border: 1px solid #00f0ff; border-radius: 5px;">
-                                <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                    <input type="checkbox" id="jk" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                        <span style="font-size: 1.1rem;">${翻译值.jkEnable}</span>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.jkSection}</label>
+                            <div style="padding: 15px; border-radius: 5px">
+                                <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                    <input type="checkbox" id="jk" style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                        <span style="font-size: 1.1rem">${翻译值.jkEnable}</span>
                                 </label>
-                                    <small style="color: #7aa9c4; font-size: 0.85rem; display: block; margin-top: 10px;">${翻译值.jkHint}</small>
+                                    <small style="font-size: 0.85rem; display: block; margin-top: 10px">${翻译值.jkHint}</small>
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">优选IP筛选设置</label>
-                            <div style="padding: 15px; background: rgba(15, 3, 40, 0.6); border: 1px solid #00f0ff; border-radius: 5px;">
-                                <div style="margin-bottom: 15px;">
-                                    <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">IP版本选择</label>
-                                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                            <input type="checkbox" id="ipv4Enabled" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1rem;">IPv4</span>
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">优选IP筛选设置</label>
+                            <div style="padding: 15px; border-radius: 5px">
+                                <div style="margin-bottom: 15px">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: bold">IP版本选择</label>
+                                    <div style="display: flex; gap: 20px; flex-wrap: wrap">
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                            <input type="checkbox" id="ipv4Enabled" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1rem">IPv4</span>
                                         </label>
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                            <input type="checkbox" id="ipv6Enabled" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1rem;">IPv6</span>
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                            <input type="checkbox" id="ipv6Enabled" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1rem">IPv6</span>
                                         </label>
                                     </div>
                                 </div>
-                                <div style="margin-bottom: 10px;">
-                                    <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">运营商选择</label>
-                                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                            <input type="checkbox" id="ispMobile" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1rem;">移动</span>
+                                <div style="margin-bottom: 10px">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: bold">运营商选择</label>
+                                    <div style="display: flex; gap: 20px; flex-wrap: wrap">
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                            <input type="checkbox" id="ispMobile" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1rem">移动</span>
                                         </label>
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                            <input type="checkbox" id="ispUnicom" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1rem;">联通</span>
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                            <input type="checkbox" id="ispUnicom" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1rem">联通</span>
                                         </label>
-                                        <label style="display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff;">
-                                            <input type="checkbox" id="ispTelecom" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer;">
-                                            <span style="font-size: 1rem;">电信</span>
+                                        <label style="display: inline-flex; align-items: center; cursor: pointer">
+                                            <input type="checkbox" id="ispTelecom" checked style="margin-right: 8px; width: 18px; height: 18px; cursor: pointer">
+                                            <span style="font-size: 1rem">电信</span>
                                         </label>
                                     </div>
                                 </div>
-                                    <small style="color: #7aa9c4; font-size: 0.85rem; display: block; margin-top: 10px;">选择要使用的IP版本和运营商，未选中的将被过滤</small>
+                                    <small style="font-size: 0.85rem; display: block; margin-top: 10px">选择要使用的IP版本和运营商，未选中的将被过滤</small>
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.allowAPIManagement}</label>
-                            <select id="apiEnabled" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.allowAPIManagement}</label>
+                            <select id="apiEnabled" style="width: 100%; padding: 12px; font-size: 14px">
                                     <option value="">${翻译值.apiEnabledDefault}</option>
                                     <option value="yes">${翻译值.apiEnabledYes}</option>
                             </select>
-                                <small style="color: #ffb400; font-size: 0.85rem;">${翻译值.apiEnabledHint}</small>
+                                <small style="font-size: 0.85rem">${翻译值.apiEnabledHint}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.regionMatching}</label>
-                            <select id="regionMatching" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.regionMatching}</label>
+                            <select id="regionMatching" style="width: 100%; padding: 12px; font-size: 14px">
                                     <option value="">${翻译值.regionMatchingDefault}</option>
                                     <option value="no">${翻译值.regionMatchingNo}</option>
                             </select>
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.regionMatchingHint}</small>
+                                <small style="font-size: 0.85rem">${翻译值.regionMatchingHint}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.downgradeControl}</label>
-                            <select id="downgradeControl" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.downgradeControl}</label>
+                            <select id="downgradeControl" style="width: 100%; padding: 12px; font-size: 14px">
                                     <option value="">${翻译值.downgradeControlDefault}</option>
                                     <option value="no">${翻译值.downgradeControlNo}</option>
                                     <option value="only">${翻译值.downgradeControlOnly}</option>
                             </select>
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.downgradeControlHint}</small>
+                                <small style="font-size: 0.85rem">${翻译值.downgradeControlHint}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.tlsControl}</label>
-                            <select id="portControl" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.tlsControl}</label>
+                            <select id="portControl" style="width: 100%; padding: 12px; font-size: 14px">
                                     <option value="">${翻译值.tlsControlDefault}</option>
                                     <option value="yes">${翻译值.tlsControlYes}</option>
                             </select>
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.tlsControlHint}</small>
+                                <small style="font-size: 0.85rem">${翻译值.tlsControlHint}</small>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00f0ff; font-weight: bold; text-shadow: 0 0 3px #00f0ff;">${翻译值.preferredControl}</label>
-                            <select id="preferredControl" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00f0ff; color: #00f0ff; font-family: 'Courier New', monospace; font-size: 14px;">
+                        <div style="margin-bottom: 15px">
+                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.preferredControl}</label>
+                            <select id="preferredControl" style="width: 100%; padding: 12px; font-size: 14px">
                                     <option value="">${翻译值.preferredControlDefault}</option>
                                     <option value="yes">${翻译值.preferredControlYes}</option>
                             </select>
-                                <small style="color: #7aa9c4; font-size: 0.85rem;">${翻译值.preferredControlHint}</small>
+                                <small style="font-size: 0.85rem">${翻译值.preferredControlHint}</small>
                         </div>
                     </form>
-                    <div id="currentConfig" style="background: rgba(0, 0, 0, 0.9); border: 1px solid #00f0ff; padding: 15px; margin: 10px 0; font-family: 'Courier New', monospace; color: #00f0ff;">
+                    <div id="currentConfig" style="padding: 15px; margin: 10px 0">
                             ${翻译值.loading}
                     </div>
-                    <div id="pathTypeInfo" style="background: rgba(15, 3, 40, 0.7); border: 1px solid #00f0ff; padding: 15px; margin: 10px 0; font-family: 'Courier New', monospace; color: #00f0ff;">
-                            <div style="font-weight: bold; margin-bottom: 8px; color: #00ff9d; text-shadow: 0 0 5px #00ff9d;">${翻译值.currentConfig}</div>
+                    <div id="pathTypeInfo" style="padding: 15px; margin: 10px 0">
+                            <div style="font-weight: bold; margin-bottom: 8px">${翻译值.currentConfig}</div>
                             <div id="pathTypeStatus">${翻译值.checking}</div>
                     </div>
                 </div>
-                <div id="statusMessage" style="display: none; padding: 10px; margin: 10px 0; border: 1px solid #00f0ff; background: rgba(8, 4, 28, 0.8); color: #00f0ff; text-shadow: 0 0 5px #00f0ff;"></div>
+                <div id="statusMessage" style="display: none; padding: 10px; margin: 10px 0"></div>
             </div>
             
             <div class="card">
                     <h2 class="card-title">${翻译值.relatedLinks}</h2>
-                <div style="text-align: center; margin: 20px 0;">
-                        <a href="https://github.com/byJoey/cfnew" target="_blank" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">${翻译值.githubProject}</a>
-                        <a href="https://github.com/byJoey/yx-tools/releases/" target="_blank" rel="noopener noreferrer" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">${翻译值.优选工具}</a>
-                    <a href="https://www.youtube.com/@joeyblog" target="_blank" style="color: #00f0ff; text-decoration: none; margin: 0 20px; font-size: 1.2rem; text-shadow: 0 0 5px #00f0ff;">YouTube @joeyblog</a>
+                <div style="text-align: center; margin: 20px 0">
+                        <a href="https://github.com/byJoey/cfnew" target="_blank" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">${翻译值.githubProject}</a>
+                        <a href="https://github.com/byJoey/yx-tools/releases/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">${翻译值.优选工具}</a>
+                    <a href="https://www.youtube.com/@joeyblog" target="_blank" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">YouTube @joeyblog</a>
                 </div>
             </div>
         </div>
@@ -2648,79 +2637,6 @@ function 生成客户端链接(客户端类型, 客户端名称) {
   }
 }
 
-// 页面特效图形化开关 (localStorage 持久化)
-window.应用页面特效 = function () {
-  var 本地值20189 = localStorage.getItem('cp-fx-off') === '1';
-  document.body.classList.toggle('fx-off', 本地值20189);
-  var 本地值20188 = document.getElementById('cpFxLabel');
-  if (本地值20188) 本地值20188.textContent = 本地值20189 ? 'FX: OFF' : 'FX: ON';
-  if (本地值20189) {
-    var 本地值20187 = document.getElementById('matrixCodeRain');
-    if (本地值20187) 本地值20187.innerHTML = '';
-  } else if (typeof 创建矩阵雨 === 'function') {
-    var 结果值 = document.getElementById('matrixCodeRain');
-    if (结果值 && !结果值.firstChild) 创建矩阵雨();
-  }
-};
-window.切换页面特效 = function () {
-  var 本地值20186 = localStorage.getItem('cp-fx-off') === '1';
-  localStorage.setItem('cp-fx-off', 本地值20186 ? '0' : '1');
-  window.应用页面特效();
-};
-(function () {
-  if (localStorage.getItem('cp-fx-off') === '1') {
-    document.addEventListener('DOMContentLoaded', function () {
-      document.body.classList.add('fx-off');
-      var 本地值20185 = document.getElementById('cpFxLabel');
-      if (本地值20185) 本地值20185.textContent = 'FX: OFF';
-    });
-  }
-})();
-function 创建矩阵雨() {
-  if (document.body && document.body.classList.contains('fx-off')) return;
-  const 矩阵值 = document.getElementById('matrixCodeRain');
-  if (!矩阵值) return;
-  const 赛博字符列表 = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ$%#@!?<>+=ABCDEF';
-  const 调色板 = ['#00f0ff', '#ff2bd6', '#a347ff', '#00ff9d'];
-  const 列数 = Math.floor(window.innerWidth / 20);
-  for (let 索引值20184 = 0; 索引值20184 < 列数; 索引值20184++) {
-    const 列20183 = document.createElement('div');
-    列20183.className = 'matrix-column';
-    列20183.style.left = 索引值20184 * 20 + 'px';
-    列20183.style.animationDelay = -Math.random() * 15 + 's';
-    列20183.style.animationDuration = Math.random() * 14 + 8 + 's';
-    列20183.style.fontSize = Math.random() * 4 + 12 + 'px';
-    列20183.style.opacity = (Math.random() * 0.7 + 0.3).toFixed(2);
-    let 文本20182 = '';
-    const 字符数量 = Math.floor(Math.random() * 30 + 18);
-    for (let 次索引值 = 0; 次索引值 < 字符数量; 次索引值++) {
-      const 字符 = 赛博字符列表[Math.floor(Math.random() * 赛博字符列表.length)];
-      const 值强调 = Math.random() > 0.85;
-      const 颜色 = 值强调 ? 调色板[Math.floor(Math.random() * 调色板.length)] : '';
-      文本20182 += 颜色 ? '<span style="color:' + 颜色 + ';text-shadow:0 0 8px ' + 颜色 + ';">' + 字符 + '</span><br>' : '<span>' + 字符 + '</span><br>';
-    }
-    列20183.innerHTML = 文本20182;
-    矩阵值.appendChild(列20183);
-  }
-  setInterval(function () {
-    const 列列表 = 矩阵值.querySelectorAll('.matrix-column');
-    列列表.forEach(function (列) {
-      if (Math.random() > 0.94) {
-        const 字符列表 = 列.querySelectorAll('span');
-        if (字符列表.length > 0) {
-          const 目标20181 = 字符列表[Math.floor(Math.random() * 字符列表.length)];
-          const 本地值20180 = 目标20181.style.color;
-          目标20181.style.color = '#ffffff';
-          目标20181.style.textShadow = '0 0 10px #ffffff, 0 0 18px #00f0ff';
-          setTimeout(function () {
-            目标20181.style.color = 本地值20180;
-            目标20181.style.textShadow = '';
-          }, 200);
-        }
-      }
-    });
-  }, 110);
-}
 async function 检查系统状态() {
   try {
     const 云墙状态 = document.getElementById('cfStatus');
@@ -2840,31 +2756,31 @@ async function 检查系统状态() {
         是否手动地区值 = true;
         值地区20169 = 数据20167.region;
         值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #00b380;">' + 翻译值20170.manualRegion + '</span>';
-        地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #00ff9d;">🎯 ' + 翻译值20170.regionNames[值地区20169] + 翻译值20170.manualRegionDesc + '</span>';
+        地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #4764ca;">🎯 ' + 翻译值20170.regionNames[值地区20169] + 翻译值20170.manualRegionDesc + '</span>';
 
         // 显示配置状态而不是检测状态
-        if (备用状态) 备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
-        if (当前地址) 当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.smartSelection + '</span>';
-        if (地区值) 地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
+        if (备用状态) 备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #4764ca;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
+        if (当前地址) 当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #4764ca;">✅ ' + 翻译值20170.smartSelection + '</span>';
+        if (地区值) 地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #4764ca;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
         return; // 提前返回，不执行后续的地区匹配逻辑
       } else if (数据20167.region && 翻译值20170.regionNames[数据20167.region]) {
         值地区20169 = 数据20167.region;
       }
-      值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #00ff9d;">' + 翻译值20170.cloudflareDetection + '</span>';
+      值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #4764ca;">' + 翻译值20170.cloudflareDetection + '</span>';
     } catch (事件值20166) {
       值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #ff3860;">' + 翻译值20170.detectionFailed + '</span>';
     }
-    地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.regionNames[值地区20169] + '</span>';
+    地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #4764ca;">✅ ' + 翻译值20170.regionNames[值地区20169] + '</span>';
 
     // 直接显示配置状态，不再进行检测
     if (备用状态) {
-      备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
+      备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #4764ca;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
     }
     if (当前地址) {
-      当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.smartSelection + '</span>';
+      当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #4764ca;">✅ ' + 翻译值20170.smartSelection + '</span>';
     }
     if (地区值) {
-      地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #00ff9d;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
+      地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #4764ca;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
     }
   } catch (错误20165) {
     function 获取凭据20164(名称20163) {
@@ -3034,7 +2950,7 @@ async function 检查键值状态() {
 
         // 检查响应是否包含KV配置信息
         if (数据20123 && 数据20123.kvEnabled === true) {
-          document.getElementById('kvStatus').innerHTML = '<span style="color: #00ff9d;">' + 翻译值20124.kvEnabled + '</span>';
+          document.getElementById('kvStatus').innerHTML = '<span style="color: #4764ca;">' + 翻译值20124.kvEnabled + '</span>';
           document.getElementById('configContent').style.display = 'block';
           document.getElementById('configCard').style.display = 'block';
           await 加载当前配置();
@@ -3269,7 +3185,7 @@ function 更新路径类型状态(customPath) {
   const link = document.createElement('a');
   link.href = window.CFNEW.subUrl;
   link.textContent = window.CFNEW.subUrl;
-  link.style.cssText = 'color:#00f0ff;overflow-wrap:anywhere';
+  link.style.cssText = 'color:#4764ca;overflow-wrap:anywhere';
   label.append(link);
   element.append(configPath, label);
 }
@@ -3328,8 +3244,8 @@ function 显示状态(消息20100, 类型20099) {
   if (状态值) {
     状态值.textContent = 消息20100;
     状态值.style.display = 'block';
-    状态值.style.color = 类型20099 === 'success' ? '#00f0ff' : '#ff3860';
-    状态值.style.borderColor = 类型20099 === 'success' ? '#00f0ff' : '#ff3860';
+    状态值.style.color = 类型20099 === 'success' ? '#4764ca' : '#ff3860';
+    状态值.style.borderColor = 类型20099 === 'success' ? '#4764ca' : '#ff3860';
     setTimeout(function () {
       状态值.style.display = 'none';
     }, 3000);
@@ -3429,7 +3345,7 @@ async function 检查加密问候状态() {
     const 加密客户端问候状态头部 = 响应20095.headers.get('X-ECH-Status');
     const 加密客户端问候配置长度 = 响应20095.headers.get('X-ECH-Config-Length');
     if (加密客户端问候状态头部 === 'ENABLED') {
-      加密客户端问候状态值.innerHTML = 'ECH状态: <span style="color: #00ff9d;">✅ 已启用' + (加密客户端问候配置长度 ? ' (配置长度: ' + 加密客户端问候配置长度 + ')' : '') + '</span>';
+      加密客户端问候状态值.innerHTML = 'ECH状态: <span style="color: #4764ca;">✅ 已启用' + (加密客户端问候配置长度 ? ' (配置长度: ' + 加密客户端问候配置长度 + ')' : '') + '</span>';
     } else {
       加密客户端问候状态值.innerHTML = 'ECH状态: <span style="color: #ffb400;">⚠️ 未启用</span>';
     }
@@ -3438,7 +3354,6 @@ async function 检查加密问候状态() {
   }
 }
 document.addEventListener('DOMContentLoaded', function () {
-  创建矩阵雨();
   检查系统状态();
   检查键值状态();
   检查加密问候状态();
@@ -3836,7 +3751,7 @@ document.addEventListener('DOMContentLoaded', function () {
         本地值20042.style.cssText = 'flex: 1; font-family: monospace; font-size: 13px;';
         const 机房名称20041 = 结果20046.colo ? 获取机房名称(结果20046.colo) : '';
         const 机房显示 = 机房名称20041 ? ' <span style="color: #00aaff;">[' + 机房名称20041 + ']</span>' : '';
-        本地值20042.innerHTML = '<span style="color: #00f0ff;">' + 结果20046.host + ':' + 结果20046.port + '</span>' + 机房显示 + ' <span style="color: #ffff00;">' + 结果20046.latency + 'ms</span>';
+        本地值20042.innerHTML = '<span style="color: #4764ca;">' + 结果20046.host + ':' + 结果20046.port + '</span>' + 机房显示 + ' <span style="color: #ffff00;">' + 结果20046.latency + 'ms</span>';
         结果项目.appendChild(复选框20043);
         结果项目.appendChild(本地值20042);
         结果列表列表.appendChild(结果项目);
@@ -4304,7 +4219,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const 城市列表 = Array.from(城市映射.values()).sort((甲值20014, 乙值20013) => 甲值20014.name.localeCompare(乙值20013.name));
     城市列表.forEach(城市 => {
       const 标签 = document.createElement('label');
-      标签.style.cssText = 'display: inline-flex; align-items: center; cursor: pointer; color: #00f0ff; font-size: 0.85rem; padding: 4px 8px; background: rgba(20, 5, 50, 0.4); border: 1px solid #7aa9c4; border-radius: 4px;';
+      标签.style.cssText = 'display: inline-flex; align-items: center; cursor: pointer; color: #4764ca; font-size: 0.85rem; padding: 4px 8px; background: rgba(20, 5, 50, 0.4); border: 1px solid #778197; border-radius: 4px;';
       const 复选框20012 = document.createElement('input');
       复选框20012.type = 'checkbox';
       复选框20012.value = 城市.colo;
