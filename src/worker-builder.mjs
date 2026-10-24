@@ -69,16 +69,7 @@ export default {
     mangle: { toplevel: true, nth_identifier: { get: n => prefix + n.toString(36) } },
     format: { ascii_only: true, comments: false },
   });
-  const notice = `/*! CFnew personal build ${buildId} | builder ${BUILDER_VERSION} | core ${CORE_VERSION}
- * Based on byJoey/cfnew (core-only, commit 12dc411f79323b7204ae69281fa42d32ec86a9b2).
- * Source: https://github.com/byJoey/cfnew
- * Original credits: zizifn/edgetunnel, cmliu, qwer-search, bestcfipas.
- * Panel modifications: https://github.com/hanhaoops/CFTWO-Panel
- * Changes: personal configuration defaults and deterministic identifier mangling.
- * Compatibility date: 2026-01-20. Bind KV as C or c for online configuration.
- * Contains your connection credentials. Keep this file private.
- */\n`;
-  const code = notice + result.code + '\n';
+  const code = result.code + '\n';
   return { code, buildId, sha256: hash(code), bytes: Buffer.byteLength(code), format };
 }
 

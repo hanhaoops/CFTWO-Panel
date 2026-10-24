@@ -14,7 +14,8 @@ test('个人构建可重复，构建码会改变代码但不会出现在产物�
   assert.notEqual(one.sha256, other.sha256);
   assert.ok(one.code.includes(uuid));
   assert.equal(one.code.includes('a-private-seed'), false);
-  assert.match(one.code, /CFnew personal build/);
+  assert.equal(one.code.includes('/*'), false);
+  assert.doesNotMatch(one.code, /CFnew|CFTWO-Panel|personal build|byJoey/);
 });
 
 test('下载接口返回 Worker 与只含 _worker.js 的 Pages 压缩包', async () => {
@@ -26,7 +27,8 @@ test('下载接口返回 Worker 与只含 _worker.js 的 Pages 压缩包', async
   assert.equal(response.headers.get('content-type'), 'application/zip');
   const files = unzipSync(new Uint8Array(await response.arrayBuffer()));
   assert.deepEqual(Object.keys(files), ['_worker.js']);
-  assert.match(strFromU8(files['_worker.js']), /CFnew personal build/);
+  assert.equal(strFromU8(files['_worker.js']).includes('/*'), false);
+  assert.doesNotMatch(strFromU8(files['_worker.js']), /CFnew|CFTWO-Panel|personal build|byJoey/);
   assert.equal((await handleBuildDownload(new Request('https://panel.example/api/builder/download', { method: 'GET' }))).status, 405);
   assert.equal((await handleBuildDownload(new Request('https://panel.example/api/builder/download', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://elsewhere.example' }, body: '{}' }))).status, 403);
 });
