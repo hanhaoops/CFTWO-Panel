@@ -33,6 +33,23 @@ CFTWO-Panel 是一个独立面板，提供连接管理、配置管理、优选�
 
 如果 Vercel 提示需要 GitHub 授权，请先在 Vercel 的 Authentication → Sign-in Methods 连接 GitHub。订阅客户端需要访问公开的面板域名；如果被 Vercel 登录保护拦截，请在 Deployment Protection 中调整设置。
 
+## 更新自己部署的面板
+
+一键部署生成的私有仓库是独立副本，不会自动跟随官方更新。仓库已内置手动的 **同步上游** 按钮，不要求 Fork，也不需要额外填写 GitHub Token：
+
+1. 打开自己的 GitHub 仓库 → **Actions** → **同步上游**。
+2. 点击 **Run workflow**，选择仓库默认分支（通常是 `main`），勾选更新确认，再运行。
+3. 等待结果变绿。工作流从 `hanhaoops/CFTWO-Panel` 的 `main` 取得代码，先安装依赖、运行测试并验证部署包，全部通过才提交到自己的默认分支；没有变化时不会创建重复提交。
+4. 到 Vercel 查看部署结果。请确认项目的 Git 关联和 Production Branch 指向自己的仓库及该分支。若未自动部署，从分支的最新提交创建部署；对旧 `Initial commit` 点 Redeploy 不会取得新代码。
+
+同步会替换面板代码，包括自己对这些文件的修改；被删除的上游文件也会同步删除。原提交历史保留，不会强制推送，旧代码可以从历史找回。`.env*`、`.github/` 和 `.vercel/` 不参与替换；Vercel 项目中的域名、环境变量及 Cloudflare Worker 的 KV 配置不受影响。GitHub 分支保护或组织策略可能阻止写入，此时工作流会报错，不会绕过保护。
+
+提交使用点击运行的 GitHub 用户身份。Vercel Hobby 用户应由已关联 Vercel 的项目所有者运行；若部署被拒绝，请检查 Vercel 的 Git 账号关联和提交者权限。此工作流使用内置 `GITHUB_TOKEN`，不会连带触发仓库中其它基于 `push` 的 GitHub Actions；Vercel 的 Git 集成部署按其项目设置处理。
+
+**自己的仓库没有这个按钮时**，先在副本的默认分支新建 `.github/workflows/sync-upstream.yml`，完整复制[官方工作流文件](https://github.com/hanhaoops/CFTWO-Panel/blob/main/.github/workflows/sync-upstream.yml)并提交，即可按上述步骤更新。已经创建的旧副本需要首次添加；一键部署若未复制 `.github/workflows/`，也按此步骤处理。若 GitHub 提示 Actions 未启用，先启用；若组织策略限制 `GITHUB_TOKEN` 写入，需要仓库管理员按策略处理。工作流文件自身及其它 Actions 不会被同步覆盖，后续调整工作流时需要重新复制该文件。
+
+同步更新的是面板和它内置的生成内核；用户已经部署的个人 Worker 仍需重新生成、上传安装包才会升级，KV 只保存配置。
+
 ## 固定一个面板只管理指定 Worker
 
 在 Vercel 项目的 Settings → Environment Variables 中设置小写变量 `w`，填 Worker 的 HTTPS 根地址，例如 `https://your-worker.example.com`，然后重新部署。留空时是公共面板，可以连接任意兼容 Worker；设置后只接受这个 Worker。

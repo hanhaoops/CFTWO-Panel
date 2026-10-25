@@ -1,0 +1,115 @@
+name: 同步上游
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: '用官方 main 更新面板代码（会覆盖自己的代码修改，保留 .env、Actions 和 Vercel 项目设置）'
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: 验证并同步官方 main
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      UPSTREAM_URL: https://github.com/hanhaoops/CFTWO-Panel.git
+      UPSTREAM_BRANCH: main
+      TARGET_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - name: 检查运行分支和更新确认
+        id: guard
+        env:
+          CONFIRM_UPDATE: ${{ inputs.confirm }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$GITHUB_REF" != "refs/heads/$TARGET_BRANCH" ]]; then
+            echo '::error::请在 Run workflow 的分支下拉框选择仓库的默认分支。'
+            exit 1
+          fi
+          if [[ "$CONFIRM_UPDATE" != 'true' ]]; then
+            echo '::error::请先勾选更新确认：面板代码将替换为官方 main；自己的代码修改可从 Git 历史找回。'
+            exit 1
+          fi
+
+      - name: 读取当前仓库
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: 取得并暂存官方代码
+        id: prepare
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 "$UPSTREAM_URL" "refs/heads/$UPSTREAM_BRANCH"
+          upstream_sha=$(git rev-parse FETCH_HEAD)
+          # 复制代码快照而非合并历史，兼容 Vercel 创建的独立仓库。
+          # GITHUB_TOKEN 无需获得工作流写入权限，现有 Actions 保留不变。
+          git restore --source="$upstream_sha" --staged --worktree -- . \
+            ':(exclude).github' ':(exclude).vercel' ':(exclude,glob)**/.env*'
+          echo "upstream_sha=$upstream_sha" >> "$GITHUB_OUTPUT"
+          if git diff --cached --quiet; then
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            echo '### 已是最新代码，无需更新' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+            echo '### 待同步的文件' >> "$GITHUB_STEP_SUMMARY"
+            git diff --cached --stat >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: 准备 Node.js
+        if: steps.prepare.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 验证更新后的代码
+        if: steps.prepare.outputs.changed == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci
+          npm test
+          npm run build:vercel -- "$RUNNER_TEMP/cftwo-panel-check"
+          git diff --exit-code
+
+      - name: 保存更新并推送
+        if: steps.prepare.outputs.changed == 'true'
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          UPSTREAM_SHA: ${{ steps.prepare.outputs.upstream_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # 使用点击运行的用户身份，便于 Vercel 核对部署者。
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR_ID+$GITHUB_ACTOR@users.noreply.github.com"
+          git commit -m "chore: sync upstream main (${UPSTREAM_SHA:0:12})"
+          gh auth setup-git
+          if ! git push origin "HEAD:refs/heads/$TARGET_BRANCH"; then
+            echo '::error::未能推送。请检查默认分支保护规则或 Actions 写入权限；若运行期间有新提交，请重新运行。本工作流不会强制覆盖历史。'
+            exit 1
+          fi
+          {
+            echo '### 同步成功'
+            echo "来源：https://github.com/hanhaoops/CFTWO-Panel/commit/$UPSTREAM_SHA"
+            echo "已更新分支：$TARGET_BRANCH"
+            echo 'Vercel 已关联此分支时会按项目设置触发部署，请到 Vercel 查看结果。'
+            echo '若未自动部署，请从此分支最新提交创建部署；不要重新部署旧的 Initial commit。'
+            echo '已保留 .env*、.github/、.vercel/；Vercel 环境变量和 Worker KV 不受影响。'
+          } >> "$GITHUB_STEP_SUMMARY"
