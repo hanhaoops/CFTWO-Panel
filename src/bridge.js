@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch(window.CFNEW.apiBase + '/api/config', { cache: 'no-store' });
       if (!response.ok) throw new Error('读取失败，请刷新后重试。');
       const config = await response.json();
-      const keys = ['freeCpu','wk','ev','et','ex','ech','tp','customDNS','customECHDomain','alpn','d','p','yx','yxURL','s','homepage','scu','ena','epd','epi','egi','ae','rm','qj','dkby','yxby','ipv4','ipv6','ispMobile','ispUnicom','ispTelecom','jk'];
+      const keys = window.CFNEW_SETTINGS.map(field => field.key);
       const settings = Object.fromEntries(keys.filter(key => config[key] !== undefined && config[key] !== null).map(key => [key, config[key]]));
       sessionStorage.setItem('cfnew-builder-draft', JSON.stringify({ uuid: window.CFNEW.uuid, settings }));
       location.assign('/builder#import');

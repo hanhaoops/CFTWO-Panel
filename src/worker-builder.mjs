@@ -2,16 +2,17 @@ import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { minify } from 'terser';
 import { zipSync, strToU8 } from 'fflate';
+import { settingKeys, settingFlags } from './settings.mjs';
+export { settingKeys } from './settings.mjs';
 
-export const BUILDER_VERSION = '1';
+export const BUILDER_VERSION = '2';
 export const CORE_VERSION = '2026.10.17.2';
 const source = await readFile(new URL('./worker-core.js', import.meta.url), 'utf8');
 const sourceHash = createHash('sha256').update(source).digest('hex');
 const sourceExport = source.match(/export\s*\{\s*([\w$]+)\s+as\s+default\s*\}\s*;?\s*$/);
 if (!sourceExport) throw new Error('内置 Worker 的模块格式不受支持');
 const coreBody = source.slice(0, sourceExport.index);
-const flags = new Set(['freeCpu', 'ev', 'et', 'ex', 'ech', 'ena', 'epd', 'epi', 'egi', 'ipv4', 'ipv6', 'ispMobile', 'ispUnicom', 'ispTelecom', 'jk']);
-export const settingKeys = ['freeCpu', 'wk', 'ev', 'et', 'ex', 'ech', 'tp', 'customDNS', 'customECHDomain', 'alpn', 'd', 'p', 'yx', 'yxURL', 's', 'homepage', 'scu', 'ena', 'epd', 'epi', 'egi', 'ae', 'rm', 'qj', 'dkby', 'yxby', 'ipv4', 'ipv6', 'ispMobile', 'ispUnicom', 'ispTelecom', 'jk'];
+const flags = new Set(settingFlags);
 const aliases = { freeCpu: ['FREE_CPU'], customDNS: ['CUSTOMDNS', 'CUSTOM_DNS'], customECHDomain: ['CUSTOMECHDOMAIN', 'CUSTOM_ECH_DOMAIN'], yxURL: ['YXURL', 'YX_URL'] };
 const hash = value => createHash('sha256').update(value).digest('hex');
 let building = 0;
@@ -69,7 +70,7 @@ export default {
     mangle: { toplevel: true, nth_identifier: { get: n => prefix + n.toString(36) } },
     format: { ascii_only: true, comments: false },
   });
-  const code = result.code + '\n';
+  const code = `// UUID: ${uuid}\n` + result.code + '\n';
   return { code, buildId, sha256: hash(code), bytes: Buffer.byteLength(code), format };
 }
 
@@ -93,7 +94,7 @@ export async function handleBuildDownload(request) {
     const body = pages ? zipSync({ '_worker.js': strToU8(result.code) }, { level: 6, mtime: new Date('2026-01-20T00:00:00Z') }) : result.code;
     return new Response(body, { headers: {
       'Content-Type': pages ? 'application/zip' : 'text/javascript; charset=utf-8',
-      'Content-Disposition': `attachment; filename="${pages ? 'Pages.zip' : '_worker.js'}"`,
+      'Content-Disposition': `attachment; filename="${pages ? 'Pages-' + result.buildId + '.zip' : '_worker-' + result.buildId + '.js'}"`,
       'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff',
       'X-Build-Id': result.buildId, 'X-Worker-SHA256': result.sha256, 'X-Worker-Bytes': String(result.bytes),
     } });

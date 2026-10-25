@@ -13,6 +13,7 @@ test('个人构建可重复，构建码会改变代码但不会出现在产物�
   assert.equal(one.sha256, same.sha256);
   assert.notEqual(one.sha256, other.sha256);
   assert.ok(one.code.includes(uuid));
+  assert.equal(one.code.split('\n')[0], '// UUID: ' + uuid);
   assert.equal(one.code.includes('a-private-seed'), false);
   assert.equal(one.code.includes('/*'), false);
   assert.doesNotMatch(one.code, /CFnew|CFTWO-Panel|personal build|byJoey/);
@@ -25,8 +26,10 @@ test('下载接口返回 Worker 与只含 _worker.js 的 Pages 压缩包', async
   }));
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'application/zip');
+  assert.equal(response.headers.get('content-disposition'), 'attachment; filename="Pages-' + response.headers.get('x-build-id') + '.zip"');
   const files = unzipSync(new Uint8Array(await response.arrayBuffer()));
   assert.deepEqual(Object.keys(files), ['_worker.js']);
+  assert.equal(strFromU8(files['_worker.js']).split('\n')[0], '// UUID: ' + uuid);
   assert.equal(strFromU8(files['_worker.js']).includes('/*'), false);
   assert.doesNotMatch(strFromU8(files['_worker.js']), /CFnew|CFTWO-Panel|personal build|byJoey/);
   assert.equal((await handleBuildDownload(new Request('https://panel.example/api/builder/download', { method: 'GET' }))).status, 405);

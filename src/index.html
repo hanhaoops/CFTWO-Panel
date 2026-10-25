@@ -16,6 +16,7 @@
 <main class="workspace-main">
   <div class="topline"><span>工作空间 <span class="breadcrumb-slash">/</span> 连接控制台</span><span class="version-pill">CFTWO-Panel</span></div>
   <header class="page-heading"><div class="eyebrow">YOUR NETWORK, SIMPLIFIED</div><h1>一处管理，从容连接<span class="heading-dot">.</span></h1><p>连接已有节点，或从一个属于你的 Worker 开始。</p></header>
+  <div id="pendingFlow"></div>
   <div class="landing-grid">
     <section class="card connect-card">
       <div class="section-heading"><span class="section-number">↗</span><div><h2>连接你的 Worker</h2><p>订阅、优选和配置，都在这里。</p></div></div>
@@ -38,6 +39,7 @@
   <footer class="workspace-footer"><span id="panelVersion">内核兼容 __CFNEW_PANEL_VERSION__</span><span>基于 <a href="https://github.com/byJoey/cfnew" target="_blank" rel="noopener noreferrer">byJoey / CFnew</a> 二次开发</span></footer>
 </main>
 <script>
+window.CFConnectionFlow.mount(document.getElementById('pendingFlow'));
 const historyInput=document.getElementById('history');
 const historyControls=document.getElementById('historyControls');
 const deleteNode=document.getElementById('deleteNode');
@@ -80,7 +82,7 @@ deleteNode.addEventListener('click',()=>{
   renderHistory();
   historyStatus.textContent='已删除这台设备上的记录，Worker 配置不受影响。';historyStatus.hidden=false;
 });
-document.querySelector('form').addEventListener('submit',()=>{if(!document.getElementById('remember').checked)return;const node={host:document.getElementById('host').value.trim(),uuid:document.getElementById('uuid').value.trim()};try{localStorage.setItem('cfnew-panel-nodes',JSON.stringify([node,...nodes.filter(item=>item.host!==node.host)].slice(0,20)))}catch{}});
+document.querySelector('form[action="/panel"]').addEventListener('submit',()=>{if(!document.getElementById('remember').checked)return;const node={host:document.getElementById('host').value.trim(),uuid:document.getElementById('uuid').value.trim()};try{localStorage.setItem('cfnew-panel-nodes',JSON.stringify([node,...nodes.filter(item=>item.host!==node.host)].slice(0,20)))}catch{}});
 </script>
 </body>
 </html>

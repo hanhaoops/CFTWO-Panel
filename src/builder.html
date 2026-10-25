@@ -20,6 +20,7 @@
   <div class="topline"><span>工作空间 <span class="breadcrumb-slash">/</span> 个人 Worker</span><span class="version-pill">内核 __CFNEW_CORE_VERSION__</span></div>
   <header class="page-heading"><div class="eyebrow">MAKE IT YOURS</div><h1>你的 Worker，你来定义<span class="heading-dot">.</span></h1><p>配置一次，生成属于你的版本，再到 Cloudflare 完成部署。</p></header>
   <div class="steps" aria-label="部署流程"><span class="current"><b>01</b>填写设置</span><i></i><span><b>02</b>生成并下载</span><i></i><span><b>03</b>部署到 Cloudflare</span></div>
+  <div id="pendingFlow"></div>
   <div class="builder-layout">
   <form id="buildForm" class="builder-form">
     <section class="card">
@@ -48,6 +49,7 @@
         <label for="buildProxyIp">ProxyIP <span class="optional">可选</span></label><input id="buildProxyIp" maxlength="2048" placeholder="host:port 或 [IPv6]:port" spellcheck="false">
         <label for="buildProxy">出站代理 <span class="optional">可选</span></label><input id="buildProxy" type="password" maxlength="2048" placeholder="socks5://user:password@host:port" autocomplete="off" spellcheck="false">
       </details>
+      <details class="advanced-settings"><summary>更多配置 <span>来源、TLS 与回退设置</span></summary><div id="moreSettings"></div></details>
     </section>
     <section class="card">
       <div class="section-heading"><span class="section-number">03</span><div><h2>选择下载格式</h2><p>两个格式使用相同的个人 Worker 代码。</p></div></div>
@@ -55,15 +57,17 @@
         <label class="choice-card"><input type="radio" name="format" value="worker" checked><span><strong>Worker 源码</strong><small>_worker.js · 粘贴到代码编辑器</small></span><span class="file-badge">JS</span></label>
         <label class="choice-card"><input type="radio" name="format" value="pages"><span><strong>Pages 部署包</strong><small>Pages.zip · 直接上传压缩包</small></span><span class="file-badge">ZIP</span></label>
       </div>
+      <label class="remember"><input id="rememberBuild" type="checkbox">在这台设备记住本次安装包记录</label>
+      <small>默认只在当前标签页临时保留 UUID 和配置。构建码不会保存在记录或备份中。</small>
       <button id="downloadWorker" class="button-primary download-button" type="submit"><span>↓</span>生成并下载</button>
-      <p id="buildStatus" class="build-status" role="status" aria-live="polite">由面板后台生成，构建码与配置不写入存储。</p>
+      <p id="buildStatus" class="build-status" role="status" aria-live="polite">构建由面板后台完成，构建码与配置不写入面板服务器存储。</p>
       <div id="buildResult" class="build-result" hidden><strong>文件已生成</strong><dl><div><dt>构建编号</dt><dd id="buildId"></dd></div><div><dt>代码大小</dt><dd id="buildBytes"></dd></div></dl><details><summary>查看 SHA-256 校验值</summary><code id="buildHash"></code></details></div>
     </section>
   </form>
   <aside class="builder-guide">
     <div class="guide-illustration" aria-hidden="true"><div class="file-art"><span>CF</span><div></div><div></div><div></div><b>your-worker.js</b></div><span class="art-label">BUILT FOR YOU</span></div>
     <h2>接下来，只差部署</h2>
-    <ol class="deployment-guide"><li><b>上传文件</b><p>Workers：完整替换代码；Pages：直接上传部署包。</p></li><li><b>检查设置</b><p>兼容日期设为 <code>2026-01-20</code>。需要在线保存时绑定 KV，名称为 <code>C</code> 或 <code>c</code>。</p></li><li><b>回到面板连接</b><p>使用部署后的域名和上方 UUID，生成客户端订阅。</p></li></ol>
+    <ol class="deployment-guide"><li><b>上传文件</b><p>Workers：完整替换代码；Pages：直接上传部署包。UUID 和所填设置已带入，无需再填同名环境变量。</p></li><li><b>检查设置</b><p>兼容日期设为 <code>2026-01-20</code>。需要在线保存时绑定 KV，名称为 <code>C</code> 或 <code>c</code>。</p></li><li><b>回到面板连接</b><p>在上方安装包记录中粘贴部署域名，自动带入 UUID，并读取实际配置。</p></li></ol>
     <a class="text-link" href="/">已部署？连接控制台 <span>↗</span></a>
     <p class="guide-note">个人化构建保持原有协议兼容。代码混淆不等于流量加密，也不保证避免平台限制。下载文件包含你的连接配置，请妥善保管。</p>
   </aside>
@@ -72,18 +76,30 @@
 </main>
 <script>
 const $ = id => document.getElementById(id);
+const pendingFlow = window.CFConnectionFlow.mount($('pendingFlow'));
+const fields = window.CFNEW_SETTINGS;
+const buildControls = {d:'buildPath',yx:'buildPreferred',p:'buildProxyIp',s:'buildProxy',ev:'buildEv',et:'buildEt',ex:'buildEx',freeCpu:'buildFreeCpu'};
+const optionLabels = {ae:{'':'关闭',yes:'开启（需保存到 KV）'},rm:{'':'开启',no:'关闭'},qj:{'':'优先代理',no:'优先直连',only:'只走代理（必须配置有效代理）'},dkby:{no:'关闭',yes:'开启'},yxby:{'':'使用优选来源',yes:'关闭优选来源'}};
+for(const field of fields){
+  if(buildControls[field.key])continue;
+  const id='buildSetting_'+field.key,label=document.createElement('label');label.htmlFor=id;label.textContent=field.label;
+  const input=document.createElement(Array.isArray(field.type)?'select':'input');input.id=id;input.dataset.setting=field.key;
+  if(Array.isArray(field.type))for(const value of field.type)input.add(new Option(optionLabels[field.key]?.[value]||value||'默认',value));
+  else {input.type=field.type==='flag'?'checkbox':field.type==='password'?'password':'text';input.maxLength=2048;input.autocomplete='off';input.spellcheck=false;}
+  if(field.type==='flag'){label.className='remember';label.prepend(input);$('moreSettings').append(label);}else $('moreSettings').append(label,input);
+  buildControls[field.key]=id;
+}
+function applyBuildSettings(settings){for(const field of fields){const input=$(buildControls[field.key]),value=settings[field.key]??field.value;if(field.type==='flag')input.checked=value==='yes';else input.value=value;}}
+applyBuildSettings({});
 const newSeed = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), value => value.toString(16).padStart(2,'0')).join('');
 const newUuid = () => {const bytes=crypto.getRandomValues(new Uint8Array(16));bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;const hex=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');return [hex.slice(0,8),hex.slice(8,12),hex.slice(12,16),hex.slice(16,20),hex.slice(20)].join('-');};
 $('buildUuid').value=newUuid();$('buildSeed').value=newSeed();
 $('newUuid').addEventListener('click',()=>{$('buildUuid').value=newUuid();});
 $('newSeed').addEventListener('click',()=>{$('buildSeed').value=newSeed();});
 $('showSeed').addEventListener('click',()=>{const show=$('buildSeed').type==='password';$('buildSeed').type=show?'text':'password';$('showSeed').textContent=show?'隐藏':'显示';$('showSeed').setAttribute('aria-label',show?'隐藏个人构建码':'显示个人构建码');});
-let importedSettings={};
 if(location.hash==='#import')try{
   const raw=sessionStorage.getItem('cfnew-builder-draft');sessionStorage.removeItem('cfnew-builder-draft');
-  if(raw){const draft=JSON.parse(raw);importedSettings=draft.settings||{};$('buildUuid').value=draft.uuid;
-    for(const [id,key] of [['buildPath','d'],['buildPreferred','yx'],['buildProxyIp','p'],['buildProxy','s']])$(id).value=importedSettings[key]||'';
-    for(const [id,key] of [['buildEv','ev'],['buildEt','et'],['buildEx','ex'],['buildFreeCpu','freeCpu']])$(id).checked=importedSettings[key]==='yes';
+  if(raw){const draft=JSON.parse(raw);applyBuildSettings(draft.settings||{});$('buildUuid').value=draft.uuid;
     $('importStatus').textContent='已带入控制台中保存的配置。此处调整只用于下载，不会修改在线 Worker。';$('importStatus').hidden=false;
   }
   history.replaceState(null,'','/builder');
@@ -92,14 +108,20 @@ $('buildForm').addEventListener('submit',async event=>{
   event.preventDefault();const button=$('downloadWorker');if(button.disabled)return;
   if(!['buildEv','buildEt','buildEx'].some(id=>$(id).checked)){$('buildStatus').textContent='请至少选择一种连接协议。';return;}
   const format=new FormData(event.currentTarget).get('format');
-  const settings={...importedSettings,d:$('buildPath').value.trim(),yx:$('buildPreferred').value.trim(),p:$('buildProxyIp').value.trim(),s:$('buildProxy').value.trim(),ev:$('buildEv').checked?'yes':'no',et:$('buildEt').checked?'yes':'no',ex:$('buildEx').checked?'yes':'no',freeCpu:$('buildFreeCpu').checked?'yes':'no'};
+  const settings=Object.fromEntries(fields.map(field=>{const input=$(buildControls[field.key]);return [field.key,field.type==='flag'?(input.checked?'yes':'no'):input.value.trim()];}));
+  if(settings.ech==='yes')settings.dkby='yes';
   const payload={uuid:$('buildUuid').value.trim(),seed:$('buildSeed').value,format,settings};
+  const rememberBuild=$('rememberBuild').checked;
   button.disabled=true;button.textContent='正在生成…';$('buildResult').hidden=true;$('buildStatus').classList.remove('is-error');$('buildStatus').textContent='正在生成个人版本，请稍候…';
   try{
     const response=await fetch('/api/builder/download',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(!response.ok){const error=await response.json();throw new Error(error.message||'生成失败，请重试');}
-    const blob=await response.blob();const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=format==='pages'?'Pages.zip':'_worker.js';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
-    $('buildId').textContent=response.headers.get('X-Build-Id');$('buildBytes').textContent=(Number(response.headers.get('X-Worker-Bytes'))/1024).toFixed(1)+' KiB';$('buildHash').textContent=response.headers.get('X-Worker-SHA256');$('buildResult').hidden=false;$('buildStatus').textContent='下载已准备好。请使用上方 UUID 连接部署后的 Worker。';
+    const buildId=response.headers.get('X-Build-Id');
+    const blob=await response.blob();const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=format==='pages'?'Pages-'+buildId+'.zip':'_worker-'+buildId+'.js';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+    let warning='';
+    try{window.CFConnectionFlow.save({uuid:payload.uuid.toLowerCase(),settings:payload.settings,buildId,createdAt:new Date().toISOString()},rememberBuild);}catch{warning=' 浏览器无法完整保存记录，请立即下载连接备份。';}
+    pendingFlow.refresh(buildId);
+    $('buildId').textContent=buildId;$('buildBytes').textContent=(Number(response.headers.get('X-Worker-Bytes'))/1024).toFixed(1)+' KiB';$('buildHash').textContent=response.headers.get('X-Worker-SHA256');$('buildResult').hidden=false;$('buildStatus').textContent='文件已生成。对应 UUID 已保留在上方安装包记录；部署后只需粘贴域名。'+warning;
   }catch(error){$('buildStatus').textContent=error.message||'连接失败，请重试';$('buildStatus').classList.add('is-error');}
   finally{button.disabled=false;button.innerHTML='<span>↓</span>生成并下载';}
 });

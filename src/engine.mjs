@@ -2,6 +2,7 @@
 import { createHash } from 'node:crypto';
 import { isIP } from 'node:net';
 import { buildSingboxConfig, normalizeNodeNames } from './singbox.mjs';
+import { settingDefinitions, settingDefaults, settingFlags } from './settings.mjs';
 export function createSubscriptionEngine(config, uuid) {
 const 基础64文本解码器 = new TextDecoder();
 
@@ -73,40 +74,7 @@ let 启用家宽链式 = false;
 let 键值配置 = {};
 
 const supportsFreeCpu = Object.hasOwn(config, 'freeCpu');
-const 配置默认值 = {
-  freeCpu: 'no',
-  wk: '',
-  ev: 'yes',
-  et: 'no',
-  ex: 'no',
-  ech: 'no',
-  tp: '',
-  customDNS: 'https://223.5.5.5/dns-query',
-  customECHDomain: 'cloudflare-ech.com',
-  alpn: '',
-  d: '',
-  p: '',
-  yx: '',
-  yxURL: '',
-  s: '',
-  homepage: '',
-  scu: 解码64('aHR0cHM6Ly91cmwudjEubWsvc3Vi'),
-  ena: 'no',
-  epd: 'yes',
-  epi: 'yes',
-  egi: 'yes',
-  ae: '',
-  rm: '',
-  qj: '',
-  dkby: 'no',
-  yxby: '',
-  ipv4: 'yes',
-  ipv6: 'yes',
-  ispMobile: 'yes',
-  ispUnicom: 'yes',
-  ispTelecom: 'yes',
-  jk: 'no'
-};
+const 配置默认值 = settingDefaults;
 
 function 是否开启值(值, 默认启用 = false) {
   if (值 === undefined || 值 === null || 值 === '') return 默认启用;
@@ -126,7 +94,7 @@ function 整理有效配置(配置) {
     ...配置默认值,
     ...配置
   };
-  ['freeCpu', 'ev', 'et', 'ex', 'ech', 'ena', 'epd', 'epi', 'egi', 'ipv4', 'ipv6', 'ispMobile', 'ispUnicom', 'ispTelecom', 'jk'].forEach(键 => {
+  settingFlags.forEach(键 => {
     快照[键] = 归一配置开关(快照[键], 是否开启值(配置默认值[键]));
   });
   if (快照.ev === 'no' && 快照.et === 'no' && 快照.ex === 'no') {
@@ -2311,7 +2279,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
                         <div style="margin-bottom: 15px">
                                 <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.tlsControl}</label>
                             <select id="portControl" style="width: 100%; padding: 12px; font-size: 14px">
-                                    <option value="">${翻译值.tlsControlDefault}</option>
+                                    <option value="no">${翻译值.tlsControlDefault}</option>
                                     <option value="yes">${翻译值.tlsControlYes}</option>
                             </select>
                                 <small style="font-size: 0.85rem">${翻译值.tlsControlHint}</small>
@@ -2948,17 +2916,19 @@ async function 检查键值状态() {
       try {
         const 数据20123 = await 响应20133.json();
 
-        // 检查响应是否包含KV配置信息
-        if (数据20123 && 数据20123.kvEnabled === true) {
-          document.getElementById('kvStatus').innerHTML = '<span style="color: #4764ca;">' + 翻译值20124.kvEnabled + '</span>';
-          document.getElementById('configContent').style.display = 'block';
-          document.getElementById('configCard').style.display = 'block';
-          await 加载当前配置();
-        } else {
-          document.getElementById('kvStatus').innerHTML = '<span style="color: #ffb400;">' + 翻译值20124.kvDisabled + '</span>';
-          document.getElementById('configCard').style.display = 'block';
-          document.getElementById('currentConfig').textContent = 翻译值20124.kvNotEnabled;
+        if (!数据20123 || typeof 数据20123.kvEnabled !== 'boolean') throw new Error('配置响应无效');
+        const 可保存 = 数据20123.kvEnabled;
+        document.getElementById('kvStatus').textContent = 可保存 ? 翻译值20124.kvEnabled : (是否值20126 ? 'پیکربندی فعلی نمایش داده می‌شود؛ برای ذخیره آنلاین KV را متصل کنید.' : '已显示当前生效配置。在线保存需先绑定 KV（C 或 c）；无需重复填写环境变量。');
+        document.getElementById('configContent').style.display = 'block';
+        document.getElementById('configCard').style.display = 'block';
+        应用配置到界面(数据20123);
+        await 加载当前配置();
+        // 未绑定 KV 仍展示安装包配置；仅阻止需要持久化的操作。
+        for (const 标识 of ['cpBtnSaveAll', 'cpBtnReset']) {
+          const 按钮 = document.getElementById(标识);
+          if (按钮) { 按钮.disabled = !可保存; if (!可保存) 按钮.title = 是否值20126 ? 'ابتدا KV را متصل کنید' : '绑定 KV 后可在线保存或重置'; }
         }
+
       } catch (数据对象错误) {
         document.getElementById('kvStatus').innerHTML = '<span style="color: #ffb400;">' + 翻译值20124.kvCheckFailed + '</span>';
         document.getElementById('configCard').style.display = 'block';
@@ -3050,80 +3020,27 @@ function 同步联动界面状态() {
   更新工作器地区状态();
 }
 
+const 配置字段 = ${JSON.stringify(settingDefinitions)};
 function 应用配置到界面(配置) {
-  写入字段值('wkRegion', 配置.wk);
-  写入开关值('freeCpu', 配置.freeCpu, false);
-  写入开关值('ev', 配置.ev, true);
-  写入开关值('et', 配置.et, false);
-  写入开关值('ex', 配置.ex, false);
-  写入开关值('ech', 配置.ech, false);
-  写入字段值('tp', 配置.tp);
-  写入字段值('customDNS', 配置.customDNS);
-  写入字段值('customECHDomain', 配置.customECHDomain);
-  写入字段值('alpn', 配置.alpn);
-  写入字段值('scu', 配置.scu);
-  写入开关值('ena', 配置.ena, false);
-  写入开关值('jk', 配置.jk, false);
+  for (const 字段 of 配置字段) {
+    if (字段.type === 'flag') 写入开关值(字段.control, 配置[字段.key], 字段.value === 'yes');
+    else {
+      let 值 = 配置[字段.key] ?? 字段.value;
+      if (字段.key === 'yx') 值 = String(值).split(/[,\\r\\n]+/).map(项 => 项.trim()).filter(Boolean).join('\\n');
+      写入字段值(字段.control, 值);
+    }
+  }
   const 家宽按钮 = document.getElementById('jkClientBtn');
   if (家宽按钮) 家宽按钮.style.display = 是否开关启用(配置.jk, false) ? '' : 'none';
-  写入开关值('epd', 配置.epd, true);
-  写入开关值('epi', 配置.epi, true);
-  写入开关值('egi', 配置.egi, true);
-  写入开关值('ipv4Enabled', 配置.ipv4, true);
-  写入开关值('ipv6Enabled', 配置.ipv6, true);
-  写入开关值('ispMobile', 配置.ispMobile, true);
-  写入开关值('ispUnicom', 配置.ispUnicom, true);
-  写入开关值('ispTelecom', 配置.ispTelecom, true);
-  写入字段值('customPath', 配置.d);
-  写入字段值('customIP', 配置.p);
-  写入字段值('yx', (配置.yx || '').split(/[,\\r\\n]+/).map(值 => 值.trim()).filter(Boolean).join('\\n'));
-  写入字段值('yxURL', 配置.yxURL);
-  写入字段值('socksConfig', 配置.s);
-  写入字段值('customHomepage', 配置.homepage);
-  写入字段值('apiEnabled', 配置.ae);
-  写入字段值('regionMatching', 配置.rm);
-  写入字段值('downgradeControl', 配置.qj);
-  写入字段值('portControl', 配置.dkby);
-  写入字段值('preferredControl', 配置.yxby);
   同步联动界面状态();
 }
 
 function 收集界面配置() {
-  const 配置 = {
-    wk: 读取字段值('wkRegion'),
-    freeCpu: 读取开关值('freeCpu', false),
-    ev: 读取开关值('ev', true),
-    et: 读取开关值('et', false),
-    ex: 读取开关值('ex', false),
-    ech: 读取开关值('ech', false),
-    tp: 读取字段值('tp'),
-    customDNS: 读取字段值('customDNS'),
-    customECHDomain: 读取字段值('customECHDomain'),
-    alpn: 读取字段值('alpn'),
-    d: 读取字段值('customPath'),
-    p: 读取字段值('customIP'),
-    yx: 读取字段值('yx'),
-    yxURL: 读取字段值('yxURL'),
-    s: 读取字段值('socksConfig'),
-    homepage: 读取字段值('customHomepage'),
-    scu: 读取字段值('scu'),
-    ena: 读取开关值('ena', false),
-    jk: 读取开关值('jk', false),
-    epd: 读取开关值('epd', true),
-    epi: 读取开关值('epi', true),
-    egi: 读取开关值('egi', true),
-    ae: 读取字段值('apiEnabled'),
-    rm: 读取字段值('regionMatching'),
-    qj: 读取字段值('downgradeControl'),
-    dkby: 读取字段值('portControl'),
-    yxby: 读取字段值('preferredControl'),
-    ipv4: 读取开关值('ipv4Enabled', true),
-    ipv6: 读取开关值('ipv6Enabled', true),
-    ispMobile: 读取开关值('ispMobile', true),
-    ispUnicom: 读取开关值('ispUnicom', true),
-    ispTelecom: 读取开关值('ispTelecom', true)
-  };
-  if (document.getElementById('freeCpu')?.disabled) delete 配置.freeCpu;
+  const 配置 = {};
+  for (const 字段 of 配置字段) {
+    if (字段.key === 'freeCpu' && document.getElementById(字段.control)?.disabled) continue;
+    配置[字段.key] = 字段.type === 'flag' ? 读取开关值(字段.control, 字段.value === 'yes') : 读取字段值(字段.control);
+  }
   if (配置.ev === 'no' && 配置.et === 'no' && 配置.ex === 'no') {
     配置.ev = 'yes';
     写入开关值('ev', 'yes', true);
@@ -3140,7 +3057,7 @@ async function 加载当前配置() {
   try {
     const 响应20116 = await fetch(接口网址20117);
     if (响应20116.status === 503) {
-      document.getElementById('currentConfig').textContent = 'KV存储未配置，无法加载配置';
+      document.getElementById('currentConfig').textContent = '配置接口暂时不可用，请检查 Worker 状态';
       return;
     }
     if (!响应20116.ok) {
@@ -3149,6 +3066,11 @@ async function 加载当前配置() {
       return;
     }
     const 配置 = await 响应20116.json();
+    window.CFNEW.config = 配置;
+    for (const 标识 of ['cpBtnSaveAll', 'cpBtnReset']) {
+      const 按钮 = document.getElementById(标识);
+      if (按钮) 按钮.disabled = 配置.kvEnabled !== true;
+    }
 
     // 过滤掉入口鉴权与 KV 状态字段。
     const 显示配置 = {};
@@ -3219,6 +3141,7 @@ function 更新工作器地区状态() {
   }
 }
 async function 保存配置(配置数据20107) {
+  if (window.CFNEW.config?.kvEnabled === false) { 显示状态('绑定 KV 后才能在线保存，当前配置可直接使用或重新生成安装包。', 'error'); return; }
   try {
     if (typeof 配置数据20107.yx === 'string') 配置数据20107 = { ...配置数据20107, yx: 配置数据20107.yx.split(/[,\\r\\n]+/).map(值 => 值.trim()).filter(Boolean).join(',') };
     const 响应 = await fetch(window.CFNEW.apiBase + '/api/config', {
@@ -3256,7 +3179,7 @@ function 显示状态(消息20100, 类型20099) {
   }
 }
 async function 重置全部配置() {
-  if (confirm('确定要重置所有配置吗？这将清空所有KV配置，恢复为环境变量设置。')) {
+  if (confirm('确定要重置所有配置吗？这将清空所有KV配置，恢复为环境变量或安装包内置设置。')) {
     try {
       const 响应20098 = await fetch(window.CFNEW.apiBase + '/api/config', {
         method: 'POST',
@@ -3424,6 +3347,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return 收集界面配置();
   }
   async function 保存全部配置() {
+    if (window.CFNEW.config?.kvEnabled === false) { 显示状态('绑定 KV 后才能在线保存，当前配置可直接使用。', 'error'); return; }
     // 至少启用一个通道
     const 值值20085 = document.getElementById('ev'),
       值值20084 = document.getElementById('et'),

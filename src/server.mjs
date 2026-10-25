@@ -8,15 +8,18 @@ import { createSubscriptionEngine } from './engine.mjs';
 import { isPublicAddress, fetchPreferredList, probePreferred } from './preferred.mjs';
 import { PANEL_VERSION, coreRelease } from './release.mjs';
 import { handleBuildDownload, CORE_VERSION } from './worker-builder.mjs';
+import { settingDefinitions } from './settings.mjs';
 
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const privateTesting = process.env.CFNEW_ALLOW_PRIVATE === 'yes';
-const theme = '<style>' + await readFile(new URL('./theme.css', import.meta.url), 'utf8') + '</style>';
-const landing = (await readFile(new URL('./index.html', import.meta.url), 'utf8')).replace('__CFNEW_PANEL_VERSION__', PANEL_VERSION).replace('</head>', theme + '</head>');
-const bridge = await readFile(new URL('./bridge.js', import.meta.url), 'utf8');
-const builderPage = (await readFile(new URL('./builder.html', import.meta.url), 'utf8')).replaceAll('__CFNEW_CORE_VERSION__', CORE_VERSION).replace('</head>', theme + '</head>');
-const rulesLicense = await readFile(new URL('./singbox-rules.NOTICE.md', import.meta.url), 'utf8') + '\n' + await readFile(new URL('./singbox-rules.LICENSE', import.meta.url), 'utf8');
 const safeJson = value => JSON.stringify(value).replaceAll('<', '\\u003c');
+const connectionFlow = await readFile(new URL('./connection-flow.js', import.meta.url), 'utf8');
+const clientFlow = '<script>window.CFNEW_SETTINGS=' + safeJson(settingDefinitions) + ';' + connectionFlow + '</script>';
+const theme = '<style>' + await readFile(new URL('./theme.css', import.meta.url), 'utf8') + '</style>';
+const landing = (await readFile(new URL('./index.html', import.meta.url), 'utf8')).replace('__CFNEW_PANEL_VERSION__', PANEL_VERSION).replace('</head>', theme + clientFlow + '</head>');
+const bridge = await readFile(new URL('./bridge.js', import.meta.url), 'utf8');
+const builderPage = (await readFile(new URL('./builder.html', import.meta.url), 'utf8')).replaceAll('__CFNEW_CORE_VERSION__', CORE_VERSION).replace('</head>', theme + clientFlow + '</head>');
+const rulesLicense = await readFile(new URL('./singbox-rules.NOTICE.md', import.meta.url), 'utf8') + '\n' + await readFile(new URL('./singbox-rules.LICENSE', import.meta.url), 'utf8');
 const preferredAuth = new Map();
 
 async function authorizePreferred(workerBase, uuid) {
@@ -207,7 +210,7 @@ export async function handlePanel(request) {
     const context = { host: workerBase, uuid, apiBase: boundWorker ? '/' + uuid : '/worker-api/' + Buffer.from(workerBase).toString('base64url') + '/' + uuid, subPath: boundWorker ? '/' + uuid + '/sub' : '/sub?' + subParams, ...(boundWorker ? { panelPath: '/' + uuid } : {}), config, release: coreRelease(config) };
     const boot = '<script>window.CFNEW=' + safeJson(context) + ';window.CFNEW.subUrl=location.origin+window.CFNEW.subPath;' + bridge + '</script>';
     let html = await rendered.text();
-    html = html.replace('<head>', '<head>' + boot + theme);
+    html = html.replace('<head>', '<head>' + clientFlow + boot + theme);
     return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
   } catch (error) {
     if (subscription) return new Response('订阅更新失败：' + error.message, { status: error.status || 503 });
