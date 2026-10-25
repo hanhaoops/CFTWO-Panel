@@ -1,7 +1,7 @@
 // 构建、配置回填和导出共用同一份字段定义。
 export const settingDefinitions = [
   ['freeCpu', 'Free CPU 保护', 'no', 'freeCpu', 'flag'],
-  ['wk', '回退地区', '', 'wkRegion'],
+  ['wk', '回退地区偏好 (wk)', '', 'wkRegion', ['', 'HK', 'US', 'SG', 'JP', 'KR', 'DE', 'SE', 'NL', 'FI', 'GB']],
   ['ev', 'VLESS · WS', 'yes', 'ev', 'flag'],
   ['et', 'Trojan · WS', 'no', 'et', 'flag'],
   ['ex', 'VLESS · XHTTP', 'no', 'ex', 'flag'],
@@ -32,7 +32,7 @@ export const settingDefinitions = [
   ['ispUnicom', '默认 IP 来源：联通', 'yes', 'ispUnicom', 'flag'],
   ['ispTelecom', '默认 IP 来源：电信', 'yes', 'ispTelecom', 'flag'],
   ['jk', '家宽链式订阅', 'no', 'jk', 'flag'],
-].map(([key, label, value, control, type = 'text']) => ({ key, label, value, control, type }));
+].map(([key, label, value, control, type = 'text']) => ({ key, label, value, control, type, ...(key === 'wk' ? { hint: '只影响回退地址选择，不会固定出口国家或 Worker 运行地区。手填 ProxyIP 或关闭地区匹配时不参与选择。' } : {}) }));
 
 export const settingKeys = settingDefinitions.map(field => field.key);
 export const settingDefaults = Object.fromEntries(settingDefinitions.map(field => [field.key, field.value]));

@@ -79,7 +79,7 @@ const $ = id => document.getElementById(id);
 const pendingFlow = window.CFConnectionFlow.mount($('pendingFlow'));
 const fields = window.CFNEW_SETTINGS;
 const buildControls = {d:'buildPath',yx:'buildPreferred',p:'buildProxyIp',s:'buildProxy',ev:'buildEv',et:'buildEt',ex:'buildEx',freeCpu:'buildFreeCpu'};
-const optionLabels = {ae:{'':'关闭',yes:'开启（需保存到 KV）'},rm:{'':'开启',no:'关闭'},qj:{'':'优先代理',no:'优先直连',only:'只走代理（必须配置有效代理）'},dkby:{no:'关闭',yes:'开启'},yxby:{'':'使用优选来源',yes:'关闭优选来源'}};
+const optionLabels = {wk:{'':'默认',HK:'香港',US:'美国',SG:'新加坡',JP:'日本',KR:'韩国',DE:'德国',SE:'瑞典',NL:'荷兰',FI:'芬兰',GB:'英国'},ae:{'':'关闭',yes:'开启（需保存到 KV）'},rm:{'':'开启',no:'关闭'},qj:{'':'优先代理',no:'优先直连',only:'只走代理（必须配置有效代理）'},dkby:{no:'关闭',yes:'开启'},yxby:{'':'使用优选来源',yes:'关闭优选来源'}};
 for(const field of fields){
   if(buildControls[field.key])continue;
   const id='buildSetting_'+field.key,label=document.createElement('label');label.htmlFor=id;label.textContent=field.label;
@@ -87,6 +87,7 @@ for(const field of fields){
   if(Array.isArray(field.type))for(const value of field.type)input.add(new Option(optionLabels[field.key]?.[value]||value||'默认',value));
   else {input.type=field.type==='flag'?'checkbox':field.type==='password'?'password':'text';input.maxLength=2048;input.autocomplete='off';input.spellcheck=false;}
   if(field.type==='flag'){label.className='remember';label.prepend(input);$('moreSettings').append(label);}else $('moreSettings').append(label,input);
+  if(field.hint){const hint=document.createElement('small');hint.textContent=field.hint;hint.id=id+'_hint';input.setAttribute('aria-describedby',hint.id);$('moreSettings').append(hint);}
   buildControls[field.key]=id;
 }
 function applyBuildSettings(settings){for(const field of fields){const input=$(buildControls[field.key]),value=settings[field.key]??field.value;if(field.type==='flag')input.checked=value==='yes';else input.value=value;}}

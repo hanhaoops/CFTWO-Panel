@@ -1608,18 +1608,17 @@ async function 处理订阅值(请求241, 用户240 = null) {
       selectClient: '[ 选择客户端 ]',
       systemStatus: '[ 系统状态 ]',
       configManagement: '[ 配置管理 ]',
-      relatedLinks: '[ 相关链接 ]',
       checking: '检测中...',
-      workerRegion: 'Worker地区: ',
-      detectionMethod: '检测方式: ',
+      workerRegion: '回退地区偏好：',
+      detectionMethod: '状态来源：',
       proxyIPStatus: 解码64('UHJveHlJUOeKtuaAgTog'),
-      currentIP: '当前使用IP: ',
+      currentIP: '实际出口 IP：',
       regionMatch: '地区匹配: ',
-      selectionLogic: '选择逻辑: ',
+      selectionLogic: '说明：',
       kvStatusChecking: '检测KV状态中...',
       kvEnabled: '✅ KV存储已启用，可以使用配置管理功能',
       kvDisabled: '⚠️ KV存储未启用或未配置',
-      specifyRegion: '指定地区 (wk):',
+      specifyRegion: '回退地区偏好 (wk):',
       autoDetect: 解码64('5a6Y5pa555u06L+e'),
       saveRegion: '保存地区配置',
       protocolSelection: 解码64('5Y2P6K6u6YCJ5oupOg=='),
@@ -1731,10 +1730,8 @@ async function 处理订阅值(请求241, 用户240 = null) {
         GB: '🇬🇧 英国'
       },
       terminal: '终端 v3.1',
-      githubProject: 'GitHub 项目',
-      优选工具: '优选工具',
       autoDetectClient: '自动识别',
-      selectionLogicText: '同地区 → 邻近地区 → 其他地区',
+      selectionLogicText: '地区偏好不代表实测出口；是否回退取决于连接结果和出站设置',
       customIPDisabledHint: 解码64('5L2/55So6Ieq5a6a5LmJUHJveHlJUOaXtu+8jOWcsOWMuumAieaLqeW3suemgeeUqA=='),
       customIPMode: 解码64('6Ieq5a6a5LmJUHJveHlJUOaooeW8jyAocOWPmOmHj+WQr+eUqCk='),
       customIPModeDesc: '自定义IP模式 (已禁用地区匹配)',
@@ -1743,9 +1740,6 @@ async function 处理订阅值(请求241, 用户240 = null) {
       customIPModeDisabled: '自定义IP模式，地区选择已禁用',
       manualRegion: '手动指定地区',
       manualRegionDesc: ' (手动指定)',
-      proxyIPAvailable: 解码64('MTAvMTAg5Y+v55SoIChQcm94eUlQ5Z+f5ZCN6aKE6K6+5Y+v55SoKQ=='),
-      smartSelection: '智能就近选择中',
-      sameRegionIP: '同地区IP可用 (1个)',
       cloudflareDetection: 解码64('5a6Y5pa555u06L+e'),
       detectionFailed: '检测失败',
       apiTestResult: 'API检测结果: ',
@@ -1765,9 +1759,8 @@ async function 处理订阅值(请求241, 用户240 = null) {
       selectClient: '[ انتخاب کلاینت ]',
       systemStatus: '[ وضعیت سیستم ]',
       configManagement: '[ مدیریت تنظیمات ]',
-      relatedLinks: '[ لینک‌های مرتبط ]',
       checking: 'در حال بررسی...',
-      workerRegion: 'منطقه Worker: ',
+      workerRegion: 'اولویت منطقه جایگزین: ',
       detectionMethod: 'روش تشخیص: ',
       proxyIPStatus: 解码64('2YjYtti524zYqiBQcm94eUlQOiA='),
       currentIP: 'IP فعلی: ',
@@ -1776,7 +1769,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
       kvStatusChecking: 'در حال بررسی وضعیت KV...',
       kvEnabled: '✅ ذخیره‌سازی KV فعال است، می‌توانید از مدیریت تنظیمات استفاده کنید',
       kvDisabled: '⚠️ ذخیره‌سازی KV فعال نیست یا پیکربندی نشده است',
-      specifyRegion: 'تعیین منطقه (wk):',
+      specifyRegion: 'اولویت منطقه مسیر جایگزین (wk):',
       autoDetect: 'اتصال مستقیم رسمی',
       saveRegion: 'ذخیره تنظیمات منطقه',
       protocolSelection: 'انتخاب پروتکل:',
@@ -1888,10 +1881,8 @@ async function 处理订阅值(请求241, 用户240 = null) {
         GB: '🇬🇧 بریتانیا'
       },
       terminal: 'ترمینال v3.1',
-      githubProject: 'پروژه GitHub',
-      优选工具: 'ابزار ترجیح IP',
       autoDetectClient: 'تشخیص خودکار',
-      selectionLogicText: 'هم‌منطقه → منطقه مجاور → سایر مناطق',
+      selectionLogicText: 'اولویت منطقه، کشور IP خروجی را تأیید نمی‌کند؛ مسیر جایگزین به نتیجه اتصال و تنظیمات خروجی بستگی دارد',
       customIPDisabledHint: 解码64('2YfZhtqv2KfZhSDYp9iz2KrZgdin2K/ZhyDYp9iyIFByb3h5SVAg2LPZgdin2LHYtNuM2Iwg2KfZhtiq2K7Yp9ioINmF2YbYt9mC2Ycg2LrbjNix2YHYudin2YQg2KfYs9iq'),
       customIPMode: 解码64('2K3Yp9mE2KogUHJveHlJUCDYs9mB2KfYsdi024wgKNmF2KrYutuM2LEgcCDZgdi52KfZhCDYp9iz2Kop'),
       customIPModeDesc: 'حالت IP سفارشی (تطبیق منطقه غیرفعال است)',
@@ -1900,9 +1891,6 @@ async function 处理订阅值(请求241, 用户240 = null) {
       customIPModeDisabled: 'حالت IP سفارشی، انتخاب منطقه غیرفعال است',
       manualRegion: 'تعیین منطقه دستی',
       manualRegionDesc: ' (تعیین دستی)',
-      proxyIPAvailable: 解码64('MTAvMTAg2K/YsSDYr9iz2KrYsdizICjYr9in2YXZhtmHINm+24zYtOKAjNmB2LHYtiBQcm94eUlQINiv2LEg2K/Ys9iq2LHYsyDYp9iz2Kop'),
-      smartSelection: 'انتخاب هوشمند نزدیک در حال انجام است',
-      sameRegionIP: 'IP هم‌منطقه در دسترس است (1)',
       cloudflareDetection: 'اتصال مستقیم رسمی',
       detectionFailed: 'تشخیص ناموفق',
       apiTestResult: 'نتیجه تشخیص API: ',
@@ -1959,7 +1947,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
             <div class="card">
                     <h2 class="card-title">${翻译值.systemStatus}</h2>
                 <div id="systemStatus" style="margin: 20px 0; padding: 15px; position: relative; overflow: hidden">
-                        <div style="margin-bottom: 15px; font-weight: bold">[ ${翻译值.checking} ]</div>
+                        <div style="margin-bottom: 15px; font-weight: bold">${是否值236 ? 'پیکربندی فعلی' : '当前配置概览'}</div>
                         <div id="regionStatus" style="margin: 8px 0">${翻译值.workerRegion}${翻译值.checking}</div>
                         <div id="geoInfo" style="margin: 8px 0; font-size: 0.9rem">${翻译值.detectionMethod}${翻译值.checking}</div>
                         <div id="backupStatus" style="margin: 8px 0">${翻译值.proxyIPStatus}${翻译值.checking}</div>
@@ -1977,8 +1965,8 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 <div id="configContent" style="display: none">
                     <form id="regionForm" style="margin-bottom: 20px">
                         <div style="margin-bottom: 15px">
-                                <label style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.specifyRegion}</label>
-                            <select id="wkRegion" style="width: 100%; padding: 12px; font-size: 14px">
+                                <label for="wkRegion" style="display: block; margin-bottom: 8px; font-weight: bold">${翻译值.specifyRegion}</label>
+                            <select id="wkRegion" aria-describedby="wkRegionExplanation wkRegionHint" style="width: 100%; padding: 12px; font-size: 14px">
                                     <option value="">${翻译值.autoDetect}</option>
                                     <option value="HK">${翻译值.regionNames.HK}</option>
                                     <option value="US">${翻译值.regionNames.US}</option>
@@ -1991,6 +1979,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
                                     <option value="FI">${翻译值.regionNames.FI}</option>
                                     <option value="GB">${翻译值.regionNames.GB}</option>
                             </select>
+                                <small id="wkRegionExplanation">${是否值236 ? 'این گزینه فقط انتخاب آدرس جایگزین را تغییر می‌دهد و کشور IP خروجی یا محل اجرای Worker را ثابت نمی‌کند. ابتدا تنظیمات را ذخیره و اتصال را دوباره برقرار کنید. ProxyIP دستی یا غیرفعال کردن تطبیق منطقه بر این اولویت مقدم است.' : '仅影响连接失败后的回退地址选择，不会固定出口国家或 Worker 运行地区。保存后需重新连接；手填 ProxyIP 或关闭地区匹配时，此偏好不参与选择。'}</small>
                                 <small id="wkRegionHint" style="font-size: 0.85rem; display: none">⚠️ ${翻译值.customIPDisabledHint}</small>
                         </div>
                     </form>
@@ -2304,14 +2293,7 @@ async function 处理订阅值(请求241, 用户240 = null) {
                 <div id="statusMessage" style="display: none; padding: 10px; margin: 10px 0"></div>
             </div>
             
-            <div class="card">
-                    <h2 class="card-title">${翻译值.relatedLinks}</h2>
-                <div style="text-align: center; margin: 20px 0">
-                        <a href="https://github.com/hanhaoops/CFTWO-Panel" target="_blank" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">${翻译值.githubProject}</a>
-                        <a href="https://github.com/byJoey/yx-tools/releases/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">${翻译值.优选工具}</a>
-                    <a href="https://www.youtube.com/@joeyblog" target="_blank" style="text-decoration: none; margin: 0 20px; font-size: 1.2rem">YouTube @joeyblog</a>
-                </div>
-            </div>
+
         </div>
         <div id="cpToastStack" class="cp-toast-stack" aria-live="polite" aria-atomic="false"></div>
         <div id="cpActionStatus" class="cp-action-status" role="status" aria-live="polite"></div>
@@ -2606,189 +2588,45 @@ function 生成客户端链接(客户端类型, 客户端名称) {
 }
 
 async function 检查系统状态() {
+  const 词 = ${JSON.stringify(是否值236 ? {
+    preference: 'اولویت منطقه جایگزین: ', source: 'منبع وضعیت: ', sourceValue: 'پیکربندی موثر Worker؛ بدون آزمون خروجی',
+    fallback: 'آدرس جایگزین: ', actual: 'IP خروجی واقعی: ', matching: 'تطبیق منطقه: ',
+    defaultRegion: 'پیش‌فرض', manual: 'ProxyIP دستی اولویت دارد: ', candidates: 'انتخاب بر اساس منطقه؛ دسترس‌پذیری آزمایش نشده',
+    defaultFallback: 'آدرس جایگزین پیش‌فرض؛ دسترس‌پذیری آزمایش نشده', disabled: 'غیرفعال؛ اولویت منطقه در انتخاب دخالت ندارد',
+    untested: 'آزمایش نشده؛ ممکن است با منطقه انتخابی متفاوت باشد', proxy: 'پروکسی خروجی تنظیم شده؛ در صورت معتبر بودن، خروجی به پروکسی بستگی دارد',
+    manualPriority: 'ProxyIP دستی مقدم است؛ اولویت منطقه استفاده نمی‌شود', enabled: 'فعال؛ فقط برای انتخاب آدرس جایگزین',
+    failed: 'خواندن پیکربندی ناموفق بود؛ هیچ منطقه‌ای تأیید نشده است'
+  } : {
+    preference: '回退地区偏好：', source: '状态来源：', sourceValue: 'Worker 当前有效配置，非出口检测',
+    fallback: '回退地址：', actual: '实际出口 IP：', matching: '地区匹配：',
+    defaultRegion: '默认', manual: '手填 ProxyIP 优先：', candidates: '按地区偏好选择候选，未实测可用性',
+    defaultFallback: '使用内置默认候选，未实测可用性', disabled: '已关闭；地区偏好不参与选择',
+    untested: '未检测；不保证与所选地区一致', proxy: '已填写出站代理；代理有效时，出口取决于代理',
+    manualPriority: '手填 ProxyIP 优先，地区偏好不参与回退选择', enabled: '已开启；只影响回退地址选择',
+    failed: '配置读取失败，未确认地区或出口'
+  })};
+  const 地区名称 = ${JSON.stringify(翻译值.regionNames)};
+  function 显示(标识, 标签, 值) {
+    const 元素 = document.getElementById(标识);
+    if (元素) 元素.textContent = 标签 + 值;
+  }
   try {
-    const 云墙状态 = document.getElementById('cfStatus');
-    const 地区状态 = document.getElementById('regionStatus');
-    const 值值20179 = document.getElementById('geoInfo');
-    const 备用状态 = document.getElementById('backupStatus');
-    const 当前地址 = document.getElementById('currentIP');
-    const 地区值 = document.getElementById('regionMatch');
-
-    // 获取当前语言设置（优先从Cookie/localStorage读取）
-    function 获取凭据20178(名称20177) {
-      const 值20176 = '; ' + document.cookie;
-      const 部分列表20175 = 值20176.split('; ' + 名称20177 + '=');
-      if (部分列表20175.length === 2) return 部分列表20175.pop().split(';').shift();
-      return null;
-    }
-    const 浏览器语言20174 = navigator.language || navigator.userLanguage || '';
-    const 已保存语言20173 = localStorage.getItem('preferredLanguage') || 获取凭据20178('preferredLanguage');
-    let 是否值20172 = false;
-    if (已保存语言20173 === 'fa' || 已保存语言20173 === 'fa-IR') {
-      是否值20172 = true;
-    } else if (已保存语言20173 === 'zh' || 已保存语言20173 === 'zh-CN') {
-      是否值20172 = false;
-    } else {
-      是否值20172 = 浏览器语言20174.includes('fa') || 浏览器语言20174.includes('fa-IR');
-    }
-    const 本地值20171 = {
-      zh: {
-        workerRegion: 'Worker地区: ',
-        detectionMethod: '检测方式: ',
-        proxyIPStatus: '${解码64('UHJveHlJUOeKtuaAgTog')}',
-        currentIP: '当前使用IP: ',
-        regionMatch: '地区匹配: ',
-        regionNames: {
-          'CF': '${解码64('8J+MkCDlrpjmlrnnm7Tov54=')}',
-          'HK': '🇭🇰 香港',
-          'US': '🇺🇸 美国',
-          'SG': '🇸🇬 新加坡',
-          'JP': '🇯🇵 日本',
-          'KR': '🇰🇷 韩国',
-          'DE': '🇩🇪 德国',
-          'SE': '🇸🇪 瑞典',
-          'NL': '🇳🇱 荷兰',
-          'FI': '🇫🇮 芬兰',
-          'GB': '🇬🇧 英国'
-        },
-        customIPMode: '${解码64('6Ieq5a6a5LmJUHJveHlJUOaooeW8jyAocOWPmOmHj+WQr+eUqCk=')}',
-        customIPModeDesc: '自定义IP模式 (已禁用地区匹配)',
-        usingCustomProxyIP: '${解码64('5L2/55So6Ieq5a6a5LmJUHJveHlJUDog')}',
-        customIPConfig: ' (p变量配置)',
-        customIPModeDisabled: '自定义IP模式，地区选择已禁用',
-        manualRegion: '手动指定地区',
-        manualRegionDesc: ' (手动指定)',
-        proxyIPAvailable: '${解码64('MTAvMTAg5Y+v55SoIChQcm94eUlQ5Z+f5ZCN6aKE6K6+5Y+v55SoKQ==')}',
-        smartSelection: '智能就近选择中',
-        sameRegionIP: '同地区IP可用 (1个)',
-        cloudflareDetection: '${解码64('5a6Y5pa555u06L+e')}',
-        detectionFailed: '检测失败',
-        unknown: '未知'
-      },
-      fa: {
-        workerRegion: 'منطقه Worker: ',
-        detectionMethod: 'روش تشخیص: ',
-        proxyIPStatus: '${解码64('2YjYtti524zYqiBQcm94eUlQOiA=')}',
-        currentIP: 'IP فعلی: ',
-        regionMatch: 'تطبیق منطقه: ',
-        regionNames: {
-          'CF': '🌐 مستقیم رسمی',
-          'HK': '🇭🇰 هنگ کنگ',
-          'US': '🇺🇸 آمریکا',
-          'SG': '🇸🇬 سنگاپور',
-          'JP': '🇯🇵 ژاپن',
-          'KR': '🇰🇷 کره جنوبی',
-          'DE': '🇩🇪 آلمان',
-          'SE': '🇸🇪 سوئد',
-          'NL': '🇳🇱 هلند',
-          'FI': '🇫🇮 فنلاند',
-          'GB': '🇬🇧 بریتانیا'
-        },
-        customIPMode: '${解码64('2K3Yp9mE2KogUHJveHlJUCDYs9mB2KfYsdi024wgKNmF2KrYutuM2LEgcCDZgdi52KfZhCDYp9iz2Kop')}',
-        customIPModeDesc: 'حالت IP سفارشی (تطبیق منطقه غیرفعال است)',
-        usingCustomProxyIP: '${解码64('2KfYs9iq2YHYp9iv2Ycg2KfYsiBQcm94eUlQINiz2YHYp9ix2LTbjDog')}',
-        customIPConfig: ' (پیکربندی متغیر p)',
-        customIPModeDisabled: 'حالت IP سفارشی، انتخاب منطقه غیرفعال است',
-        manualRegion: 'تعیین منطقه دستی',
-        manualRegionDesc: ' (تعیین دستی)',
-        proxyIPAvailable: '${解码64('MTAvMTAg2K/YsSDYr9iz2KrYsdizICjYr9in2YXZhtmHINm+24zYtOKAjNmB2LHYtiBQcm94eUlQINiv2LEg2K/Ys9iq2LHYsyDYp9iz2Kop')}',
-        smartSelection: 'انتخاب هوشمند نزدیک در حال انجام است',
-        sameRegionIP: 'IP هم‌منطقه در دسترس است (1)',
-        cloudflareDetection: 'اتصال مستقیم رسمی',
-        detectionFailed: 'تشخیص ناموفق',
-        unknown: 'ناشناخته'
-      }
-    };
-    const 翻译值20170 = 本地值20171[是否值20172 ? 'fa' : 'zh'];
-    let 值地区20169 = 'US'; // 默认值
-    let 是否自定义地址值 = false;
-    let 是否手动地区值 = false;
-    try {
-      const 响应20168 = await fetch(window.CFNEW.apiBase + '/region');
-      const 数据20167 = await 响应20168.json();
-      if (数据20167.region === 'CUSTOM') {
-        是否自定义地址值 = true;
-        值地区20169 = 'CUSTOM';
-
-        // 获取自定义IP的详细信息
-        const 自定义地址值 = 数据20167.ci || 翻译值20170.unknown;
-        值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #ffb400;">⚙️ ' + 翻译值20170.customIPMode + '</span>';
-        地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #ffb400;">🔧 ' + 翻译值20170.customIPModeDesc + '</span>';
-
-        // 显示自定义IP配置状态，包含具体IP
-        if (备用状态) 备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #ffb400;">🔧 ' + 翻译值20170.usingCustomProxyIP + 自定义地址值 + '</span>';
-        if (当前地址) 当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #ffb400;">✅ ' + 自定义地址值 + 翻译值20170.customIPConfig + '</span>';
-        if (地区值) 地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #ffb400;">⚠️ ' + 翻译值20170.customIPModeDisabled + '</span>';
-        return; // 提前返回，不执行后续的地区匹配逻辑
-      } else if (数据20167.detectionMethod === '手动指定地区' || 数据20167.detectionMethod === 'تعیین منطقه دستی') {
-        是否手动地区值 = true;
-        值地区20169 = 数据20167.region;
-        值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #00b380;">' + 翻译值20170.manualRegion + '</span>';
-        地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #4764ca;">🎯 ' + 翻译值20170.regionNames[值地区20169] + 翻译值20170.manualRegionDesc + '</span>';
-
-        // 显示配置状态而不是检测状态
-        if (备用状态) 备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #4764ca;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
-        if (当前地址) 当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #4764ca;">✅ ' + 翻译值20170.smartSelection + '</span>';
-        if (地区值) 地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #4764ca;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
-        return; // 提前返回，不执行后续的地区匹配逻辑
-      } else if (数据20167.region && 翻译值20170.regionNames[数据20167.region]) {
-        值地区20169 = 数据20167.region;
-      }
-      值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #4764ca;">' + 翻译值20170.cloudflareDetection + '</span>';
-    } catch (事件值20166) {
-      值值20179.innerHTML = 翻译值20170.detectionMethod + '<span style="color: #ff3860;">' + 翻译值20170.detectionFailed + '</span>';
-    }
-    地区状态.innerHTML = 翻译值20170.workerRegion + '<span style="color: #4764ca;">✅ ' + 翻译值20170.regionNames[值地区20169] + '</span>';
-
-    // 直接显示配置状态，不再进行检测
-    if (备用状态) {
-      备用状态.innerHTML = 翻译值20170.proxyIPStatus + '<span style="color: #4764ca;">✅ ' + 翻译值20170.proxyIPAvailable + '</span>';
-    }
-    if (当前地址) {
-      当前地址.innerHTML = 翻译值20170.currentIP + '<span style="color: #4764ca;">✅ ' + 翻译值20170.smartSelection + '</span>';
-    }
-    if (地区值) {
-      地区值.innerHTML = 翻译值20170.regionMatch + '<span style="color: #4764ca;">✅ ' + 翻译值20170.sameRegionIP + '</span>';
-    }
-  } catch (错误20165) {
-    function 获取凭据20164(名称20163) {
-      const 值20162 = '; ' + document.cookie;
-      const 部分列表20161 = 值20162.split('; ' + 名称20163 + '=');
-      if (部分列表20161.length === 2) return 部分列表20161.pop().split(';').shift();
-      return null;
-    }
-    const 浏览器语言20160 = navigator.language || navigator.userLanguage || '';
-    const 已保存语言20159 = localStorage.getItem('preferredLanguage') || 获取凭据20164('preferredLanguage');
-    let 是否值20158 = false;
-    if (已保存语言20159 === 'fa' || 已保存语言20159 === 'fa-IR') {
-      是否值20158 = true;
-    } else {
-      是否值20158 = 浏览器语言20160.includes('fa') || 浏览器语言20160.includes('fa-IR');
-    }
-    const 本地值20157 = {
-      zh: {
-        workerRegion: 'Worker地区: ',
-        detectionMethod: '检测方式: ',
-        proxyIPStatus: '${解码64('UHJveHlJUOeKtuaAgTog')}',
-        currentIP: '当前使用IP: ',
-        regionMatch: '地区匹配: ',
-        detectionFailed: '检测失败'
-      },
-      fa: {
-        workerRegion: 'منطقه Worker: ',
-        detectionMethod: 'روش تشخیص: ',
-        proxyIPStatus: '${解码64('2YjYtti524zYqiBQcm94eUlQOiA=')}',
-        currentIP: 'IP فعلی: ',
-        regionMatch: 'تطبیق منطقه: ',
-        detectionFailed: 'تشخیص ناموفق'
-      }
-    };
-    const 翻译值20156 = 本地值20157[是否值20158 ? 'fa' : 'zh'];
-    document.getElementById('regionStatus').innerHTML = 翻译值20156.workerRegion + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
-    document.getElementById('geoInfo').innerHTML = 翻译值20156.detectionMethod + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
-    document.getElementById('backupStatus').innerHTML = 翻译值20156.proxyIPStatus + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
-    document.getElementById('currentIP').innerHTML = 翻译值20156.currentIP + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
-    document.getElementById('regionMatch').innerHTML = 翻译值20156.regionMatch + '<span style="color: #ff3860;">❌ ' + 翻译值20156.detectionFailed + '</span>';
+    const 响应 = await fetch(window.CFNEW.apiBase + '/api/config', { cache: 'no-store' });
+    if (!响应.ok) throw new Error('配置读取失败');
+    const 配置 = await 响应.json();
+    if (!配置 || typeof 配置 !== 'object' || Array.isArray(配置) || typeof 配置.kvEnabled !== 'boolean') throw new Error('配置响应无效');
+    const 地区 = String(配置.wk || '').trim().toUpperCase();
+    const 手填地址 = String(配置.p || '').trim();
+    const 出站代理 = String(配置.s || '').trim();
+    const 匹配开启 = String(配置.rm || '').toLowerCase() !== 'no';
+    显示('regionStatus', 词.preference, 地区 ? 地区名称[地区] || 地区 : 词.defaultRegion);
+    显示('geoInfo', 词.source, 词.sourceValue);
+    显示('backupStatus', 词.fallback, 手填地址 ? 词.manual + 手填地址 : 地区 && 匹配开启 ? 词.candidates : 词.defaultFallback);
+    显示('currentIP', 词.actual, 词.untested);
+    显示('regionMatch', 词.matching, 手填地址 ? 词.manualPriority : !匹配开启 ? 词.disabled : 词.enabled);
+    if (出站代理) 显示('regionMatch', 词.matching, (手填地址 ? 词.manualPriority + '；' : !匹配开启 ? 词.disabled + '；' : '') + 词.proxy);
+  } catch {
+    for (const [标识, 标签] of [['regionStatus', 词.preference], ['geoInfo', 词.source], ['backupStatus', 词.fallback], ['currentIP', 词.actual], ['regionMatch', 词.matching]]) 显示(标识, 标签, 词.failed);
   }
 }
 async function 测试接口() {
