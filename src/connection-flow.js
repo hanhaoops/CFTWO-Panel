@@ -63,6 +63,12 @@
   function differences(record, config) {
     return fields.filter(field => Object.hasOwn(record.settings, field.key) && normalized(field.key, record.settings[field.key]) !== normalized(field.key, config[field.key])).map(field => field.label);
   }
+  function connectionNotice({ host, uuid, config, buildId, storageWarning = false }) {
+    const record = records().find(item => item.buildId === buildId && item.host === host && item.uuid === uuid);
+    const changed = record ? differences(record, config) : [];
+    return (changed.length ? '当前生效配置与安装包不同：' + changed.join('、') + '。控制台已显示实际生效值，未自动覆盖线上配置。' : '')
+      + (storageWarning ? ' 浏览器未能保存连接记录，请保留控制台地址，或重新生成安装包并下载连接备份。' : '');
+  }
   function downloadBackup(record) {
     const blob = new Blob([JSON.stringify({ type: 'cftwo-connection', version: 1, ...validate(record) }, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob), link = document.createElement('a');
@@ -144,7 +150,6 @@
         const config = await response.json();
         if (!response.ok) throw new Error(config.message || '连接失败，请检查域名和部署是否完成');
         if (config.uuid !== record.uuid) throw new Error('此域名的 UUID 与所选安装包不一致，请检查部署文件或 Cloudflare 的 u/U 设置');
-        const changed = differences(record, config);
         let storageWarning = false;
         try { save(record, keep); } catch { storageWarning = true; }
         if (keep) {
@@ -155,12 +160,9 @@
           } catch { storageWarning = true; }
         }
         // 只读核对，不把安装包快照自动覆盖到线上 KV。
-        const target = '/panel?' + new URLSearchParams({ host: record.host, uuid: record.uuid });
-        if (changed.length || storageWarning) {
-          status.textContent = (changed.length ? '当前生效配置与安装包不同：' + changed.join('、') + '。可能由旧 KV 或环境变量覆盖。控制台会显示实际值，不会自动覆盖。' : '') + (storageWarning ? ' 浏览器未能保存记录，请先下载连接备份。' : '');
-          const link = document.createElement('a'); link.href = target; link.className = 'button-primary'; link.textContent = '查看当前生效配置';
-          status.append(document.createElement('br'), link);
-        } else location.assign(target);
+        // 验证通过即进入；差异和本地存储提示交给控制台展示，不再要求二次点击。
+        const target = '/panel?' + new URLSearchParams({ host: record.host, uuid: record.uuid, build: record.buildId, ...(storageWarning ? { storage: 'failed' } : {}) });
+        location.assign(target);
       } catch (error) { status.textContent = error.message || '连接未完成，请稍后重试'; }
       finally {
         busy = false; connect.disabled = select.disabled = host.disabled = remember.disabled = false;
@@ -170,5 +172,5 @@
     render();
     return { refresh: render };
   }
-  window.CFConnectionFlow = { records, save, remove, differences, mount, downloadBackup, parseBackup };
+  window.CFConnectionFlow = { records, save, remove, differences, connectionNotice, mount, downloadBackup, parseBackup };
 })();

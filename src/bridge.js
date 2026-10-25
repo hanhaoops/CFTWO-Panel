@@ -2,6 +2,10 @@
 // 登录后用真实 UUID 保持连接，修改自定义入口不会使重载失效。
 const panelLocation = new URL(location.href);
 const access = (panelLocation.searchParams.get('uuid') || '').trim();
+const connectionBuildId = panelLocation.searchParams.get('build');
+const connectionStorageWarning = panelLocation.searchParams.get('storage') === 'failed';
+panelLocation.searchParams.delete('build');
+panelLocation.searchParams.delete('storage');
 try {
   const nodes = JSON.parse(localStorage.getItem('cfnew-panel-nodes') || '[]');
   if (Array.isArray(nodes)) {
@@ -51,6 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
   builderDescription.append(builderTitle, builderHint, builderError);
   builderCard.append(builderDescription, buildButton);
   document.querySelector('.container .header')?.after(builderCard);
+  const connectionNotice = window.CFConnectionFlow.connectionNotice({ host: window.CFNEW.host, uuid: window.CFNEW.uuid, config: window.CFNEW.config, buildId: connectionBuildId, storageWarning: connectionStorageWarning });
+  if (connectionNotice) {
+    const notice = document.createElement('section');
+    notice.className = 'card info-banner';
+    notice.setAttribute('role', 'status');
+    notice.textContent = connectionNotice;
+    builderCard.before(notice);
+  }
   const release = window.CFNEW.release;
   const ignoredUpdateKey = 'cfnew-panel-ignored-update';
   let ignoredVersion = '';

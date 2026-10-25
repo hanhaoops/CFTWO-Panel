@@ -64,6 +64,56 @@ test('核对配置忽略路径边斜杠与优选换行差异，但报告旧KV覆
   assert.equal(flow.differences(snapshot, config).join().includes('pass'), false);
 });
 
+test('验证通过后一次进入控制台：配置相同、有差异或记录保存失败均不要求第二次点击', async () => {
+  for (const scenario of ['same', 'different', 'storage-failed', 'wrong-uuid', 'unavailable']) {
+    const local = storage(), session = storage(), navigations = [], requests = [];
+    const window = { CFNEW_SETTINGS: settingDefinitions, localStorage: local, sessionStorage: session };
+    const elements = new Map();
+    const element = () => ({ value: '', checked: false, handlers: {}, children: [], addEventListener(type, handler) { this.handlers[type] = handler; }, replaceChildren() { this.children = []; }, add(option) { this.children.push(option); }, append(...children) { this.children.push(...children); } });
+    const get = role => { if (!elements.has(role)) elements.set(role, element()); return elements.get(role); };
+    const container = { querySelector(selector) { return get(selector.match(/data-role="([^"]+)"/)?.[1] || selector); } };
+    const snapshot = { ...record(), host: 'https://worker.example' };
+    const config = { ...snapshot.settings, uuid, kvEnabled: true, ...(scenario === 'different' ? { s: 'different-password' } : {}), ...(scenario === 'wrong-uuid' ? { uuid: 'a-different-worker' } : {}) };
+    vm.runInNewContext(source, {
+      window, localStorage: local, URL, URLSearchParams, btoa,
+      Option: class { constructor(text, value) { this.text = text; this.value = value; } },
+      document: { createElement: element }, location: { assign: url => navigations.push(url) },
+      fetch: async (url, options) => { requests.push({ url, options }); return scenario === 'unavailable' ? Response.json({ message: 'Worker 不可达' }, { status: 503 }) : Response.json(config); },
+    });
+    const flow = window.CFConnectionFlow;
+    flow.save(snapshot); flow.mount(container);
+    if (scenario === 'storage-failed') session.setItem = () => { throw new Error('storage full'); };
+    await get('form').handlers.submit({ preventDefault() {} });
+    assert.equal(requests.length, 1);
+    assert.equal(requests[0].options.method, undefined, '验证仅发出只读请求');
+    if (['wrong-uuid', 'unavailable'].includes(scenario)) {
+      assert.equal(navigations.length, 0, '鉴权失败或无法连接时仍必须阻止进入');
+      assert.match(get('status').textContent, scenario === 'wrong-uuid' ? /UUID.*不一致/ : /Worker 不可达/);
+    } else {
+      assert.equal(navigations.length, 1, scenario);
+      const url = new URL(navigations[0], 'https://panel.example');
+      assert.equal(url.pathname, '/panel'); assert.equal(url.searchParams.get('uuid'), uuid);
+      assert.equal(url.searchParams.get('host'), snapshot.host);
+      assert.equal(url.searchParams.get('build'), snapshot.buildId);
+      assert.equal(url.searchParams.get('storage'), scenario === 'storage-failed' ? 'failed' : null);
+      assert.equal(flow.records()[0].settings.s, snapshot.settings.s, '不把在线配置写回安装包快照');
+    }
+  }
+});
+
+test('控制台按当前实际配置提示差异，只匹配当前节点和构建，不泄露代理密码', () => {
+  const flow = client(), snapshot = { ...record(), host: 'https://worker.example' };
+  flow.save(snapshot);
+  const context = { host: snapshot.host, uuid, buildId: snapshot.buildId, config: { ...snapshot.settings, s: 'new-secret' } };
+  const message = flow.connectionNotice(context);
+  assert.match(message, /出站代理/); assert.match(message, /未自动覆盖/);
+  assert.ok(!message.includes('new-secret') && !message.includes('user:pass'));
+  assert.equal(flow.connectionNotice({ ...context, host: 'https://another.example' }), '');
+  assert.equal(flow.connectionNotice({ ...context, buildId: undefined }), '');
+  assert.equal(flow.connectionNotice({ ...context, config: snapshot.settings }), '');
+  assert.match(flow.connectionNotice({ ...context, storageWarning: true }), /浏览器未能保存连接记录/);
+});
+
 test('连接备份可导出并恢复，保留域名与配置但剔除构建码，拒绝非备份文件', async () => {
   let blob, downloaded = false;
   const window = { CFNEW_SETTINGS: settingDefinitions, localStorage: storage(), sessionStorage: storage() };
