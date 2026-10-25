@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { unzipSync, strFromU8 } from 'fflate';
-import { buildWorker, handleBuildDownload, validateBuild } from '../worker-builder.mjs';
+import { buildWorker, handleBuildDownload, validateBuild, CORE_VERSION } from '../worker-builder.mjs';
 
 const uuid = '351c9981-04b6-4103-aa4b-864aa9c91469';
 const settings = { ev: 'yes', et: 'no', ex: 'no', d: 'Admin/Panel' };
@@ -14,6 +14,8 @@ test('个人构建可重复，构建码会改变代码但不会出现在产物�
   assert.notEqual(one.sha256, other.sha256);
   assert.ok(one.code.includes(uuid));
   assert.equal(one.code.split('\n')[0], '// UUID: ' + uuid);
+  assert.equal(one.code.split('\n')[1], '// Core version: ' + CORE_VERSION);
+  assert.equal(one.coreVersion, CORE_VERSION);
   assert.equal(one.code.includes('a-private-seed'), false);
   assert.equal(one.code.includes('/*'), false);
   assert.doesNotMatch(one.code, /CFnew|CFTWO-Panel|personal build|byJoey/);
@@ -26,10 +28,12 @@ test('下载接口返回 Worker 与只含 _worker.js 的 Pages 压缩包', async
   }));
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'application/zip');
+  assert.equal(response.headers.get('x-core-version'), CORE_VERSION);
   assert.equal(response.headers.get('content-disposition'), 'attachment; filename="Pages-' + response.headers.get('x-build-id') + '.zip"');
   const files = unzipSync(new Uint8Array(await response.arrayBuffer()));
   assert.deepEqual(Object.keys(files), ['_worker.js']);
   assert.equal(strFromU8(files['_worker.js']).split('\n')[0], '// UUID: ' + uuid);
+  assert.equal(strFromU8(files['_worker.js']).split('\n')[1], '// Core version: ' + CORE_VERSION);
   assert.equal(strFromU8(files['_worker.js']).includes('/*'), false);
   assert.doesNotMatch(strFromU8(files['_worker.js']), /CFnew|CFTWO-Panel|personal build|byJoey/);
   assert.equal((await handleBuildDownload(new Request('https://panel.example/api/builder/download', { method: 'GET' }))).status, 405);

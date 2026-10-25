@@ -56,6 +56,9 @@ test('绑定后首页无连接表单，指定Worker的读取、保存与六种�
   process.env.w = '  ' + allowed.host + '/  ';
   const html = await (await request('/')).text();
   assert.equal(html, 'hello');
+  const connections = await request('/connect');
+  assert.equal(connections.status, 200);
+  assert.ok((await connections.text()).includes('window.CFNEW_BOUND_WORKER=' + JSON.stringify(allowed.host)));
   for (const [, script] of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)) new Function(script);
   assert.equal((await request('/panel?' + new URLSearchParams({ uuid }))).status, 200);
   const response = await request(allowed.api + '/api/config', { method: 'POST', body: JSON.stringify({ yx: '104.16.1.2:443#保存名称' }) });

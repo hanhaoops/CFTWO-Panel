@@ -185,9 +185,9 @@ export async function handlePanel(request) {
   if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('只支持 GET', { status: 405 });
   if (url.pathname === '/health') return Response.json({ ok: true });
   if (url.pathname === '/rules-license') return new Response(rulesLicense, { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=86400' } });
-  if (url.pathname === '/') {
-    if (boundWorker) return new Response('hello', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
-    try { return new Response(landing, { headers: { 'Content-Type': 'text/html; charset=utf-8' } }); }
+  if (url.pathname === '/' || url.pathname === '/connect') {
+    if (url.pathname === '/' && boundWorker) return new Response('hello', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+    try { return new Response(landing.replace('</head>', '<script>window.CFNEW_BOUND_WORKER=' + safeJson(boundWorker) + ';</script></head>'), { headers: { 'Content-Type': 'text/html; charset=utf-8' } }); }
     catch (error) { return new Response(error.message, { status: error.status || 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } }); }
   }
   const legacy = ['/panel', '/sub'].includes(url.pathname) && (!boundWorker || url.searchParams.has('uuid') || url.searchParams.has('host'));

@@ -21,7 +21,7 @@
       if (!keys.has(key) || typeof value !== 'string' || value.length > (key === 'yx' ? 32768 : 2048)) throw new Error('连接备份包含无效配置');
       settings[key] = value;
     }
-    return { uuid: input.uuid, buildId: input.buildId, createdAt: input.createdAt, settings, host: typeof input.host === 'string' ? input.host.slice(0, 2048) : '' };
+    return { uuid: input.uuid, buildId: input.buildId, createdAt: input.createdAt, settings, host: typeof input.host === 'string' ? input.host.slice(0, 2048) : '', ...(typeof input.coreVersion === 'string' && /^20\d{2}\.\d{1,2}\.\d{1,2}\.\d+$/.test(input.coreVersion) ? { coreVersion: input.coreVersion } : {}) };
   }
   function records() {
     const merged = new Map();
@@ -83,7 +83,7 @@
   }
   function mount(container) {
     container.innerHTML = `<details class="card pending-card">
-      <summary>部署后继续连接</summary><p>选择刚下载的安装包，部署后只需粘贴 Worker 域名。</p>
+      <summary>安装包记录与连接</summary><p>选择已保存的安装包，部署后只需粘贴 Worker 域名。</p>
       <label>安装包记录<select data-role="records" aria-label="选择安装包记录"></select></label>
       <small data-role="identity"></small>
       <form><label>部署后的 Worker 域名<input data-role="host" required placeholder="worker.example.com" autocomplete="off" spellcheck="false"></label>
@@ -101,13 +101,13 @@
       container.querySelector('details').open = all.length > 0;
       select.replaceChildren();
       if (!all.length) select.add(new Option('暂无记录，可导入连接备份', ''));
-      for (const record of all) select.add(new Option(new Date(record.createdAt).toLocaleString() + ' · ' + record.buildId, record.buildId));
+      for (const record of all) select.add(new Option(new Date(record.createdAt).toLocaleString() + ' · ' + record.buildId + (record.coreVersion ? ' · 内核 ' + record.coreVersion : ''), record.buildId));
       select.value = all.some(record => record.buildId === preferred) ? preferred : all[0]?.buildId || '';
       choose();
     }
     function choose() {
       selected = records().find(record => record.buildId === select.value);
-      host.value = selected?.host || ''; remember.checked = !!selected?.remember;
+      host.value = window.CFNEW_BOUND_WORKER || selected?.host || ''; host.readOnly = !!window.CFNEW_BOUND_WORKER; remember.checked = !!selected?.remember;
       get('identity').textContent = selected ? 'UUID：' + selected.uuid : '下载成功后会在这里保留对应记录。';
       for (const role of ['connect', 'backup', 'delete']) get(role).disabled = !selected;
       host.disabled = remember.disabled = !selected;

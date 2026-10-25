@@ -10,8 +10,8 @@
 <aside class="sidebar">
   <a class="wordmark" href="/"><span class="logo-mark">C</span> CFTWO-Panel<span class="edition">WORKSPACE</span></a>
   <div class="nav-caption">工作空间</div>
-  <nav aria-label="主导航"><a class="active" href="/" aria-current="page"><span class="nav-icon">▦</span>连接控制台</a><a href="/builder"><span class="nav-icon">◇</span>个人 Worker<span class="nav-tag">NEW</span></a></nav>
-  <div class="sidebar-bottom"><span class="muted-dot"></span>独立部署，自主管理<br><small>CFTWO-Panel</small></div>
+  <nav aria-label="主导航"><a class="active" href="/connect" aria-current="page"><span class="nav-icon">▦</span>连接控制台</a><a href="/builder"><span class="nav-icon">◇</span>个人 Worker<span class="nav-tag">NEW</span></a></nav>
+  <div class="sidebar-bottom"><span class="muted-dot"></span>独立部署，自主管理<br><small><a href="https://github.com/hanhaoops/CFTWO-Panel" target="_blank" rel="noopener noreferrer">CFTWO-Panel</a></small></div>
 </aside>
 <main class="workspace-main">
   <div class="topline"><span>工作空间 <span class="breadcrumb-slash">/</span> 连接控制台</span><span class="version-pill">CFTWO-Panel</span></div>
@@ -39,7 +39,9 @@
   <footer class="workspace-footer"><span id="panelVersion">内核兼容 __CFNEW_PANEL_VERSION__</span><span>基于 <a href="https://github.com/byJoey/cfnew" target="_blank" rel="noopener noreferrer">byJoey / CFnew</a> 二次开发</span></footer>
 </main>
 <script>
-window.CFConnectionFlow.mount(document.getElementById('pendingFlow'));
+const pendingFlow=window.CFConnectionFlow.mount(document.getElementById('pendingFlow'));
+if(/^#build=[a-f0-9]{16}$/.test(location.hash))pendingFlow.refresh(location.hash.slice(7));
+if(window.CFNEW_BOUND_WORKER){document.getElementById('host').value=window.CFNEW_BOUND_WORKER;document.getElementById('host').readOnly=true;}
 const historyInput=document.getElementById('history');
 const historyControls=document.getElementById('historyControls');
 const deleteNode=document.getElementById('deleteNode');

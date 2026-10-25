@@ -22,20 +22,31 @@ else {
   history.replaceState(null, '', panelLocation);
 }
 document.addEventListener('DOMContentLoaded', () => {
-  const builderCard = document.createElement('section');
-  builderCard.className = 'card console-builder-card';
+  const release = window.CFNEW.release;
+  const updateAvailable = release.needsUpdate;
+  const builderCard = document.createElement(updateAvailable ? 'section' : 'details');
+  builderCard.className = updateAvailable ? 'card console-builder-card' : 'card core-maintenance';
+  builderCard.id = 'workerMaintenance';
+  builderCard.dataset.updateAvailable = String(updateAvailable);
   const builderDescription = document.createElement('div');
-  const builderTitle = document.createElement('h2');
-  builderTitle.textContent = '构建个人 Worker';
+  const builderTitle = document.createElement(updateAvailable ? 'h2' : 'summary');
+  const stateLabels = { current: '与平台版本一致', newer: '运行版本较新', unknown: '运行版本未识别' };
+  builderTitle.textContent = updateAvailable ? '有可更新的 Worker 内核' : 'Worker 内核 ' + (release.coreVersion || '版本未知') + ' · ' + (stateLabels[release.state] || '版本与维护');
+  if (!updateAvailable) builderCard.append(builderTitle);
+  const versions = document.createElement('small');
+  versions.textContent = '当前 Worker：' + (release.coreVersion || '未标版本') + ' · 平台生成版本：' + release.availableCoreVersion;
   const builderHint = document.createElement('p');
-  builderHint.textContent = '带入已保存的配置，生成个人版本并下载到本地。';
+  builderHint.textContent = updateAvailable ? '升级内核需要重新生成并上传安装包。保留原 UUID 和 KV 绑定，已保存配置可继续使用。' : window.CFNEW.config.kvEnabled ? 'KV 已启用，日常修改配置直接保存即可，无需重新生成。仅升级内核或另存安装包时使用下方入口。' : '当前未绑定 KV。调整固化配置或升级内核时可重新生成安装包；绑定 KV 后日常配置可直接在线保存。';
+  if (release.state === 'newer') builderHint.textContent = '你的 Worker 内核比平台内置版本新。请先更新生成平台，避免重新生成后降级。';
+  if (release.state === 'unknown') builderHint.textContent += ' 当前 Worker 未报告可识别的版本，无法判断是否需要升级。';
   const builderError = document.createElement('small');
   builderError.setAttribute('role', 'status');
   const buildButton = document.createElement('button');
   buildButton.type = 'button';
   buildButton.className = 'button-primary';
   buildButton.id = 'buildFromSaved';
-  buildButton.textContent = '用已保存配置生成 ↗';
+  buildButton.textContent = updateAvailable ? '保留配置，生成更新包 ↗' : '手动重新生成（保留 UUID） ↗';
+  buildButton.disabled = release.state === 'newer';
   buildButton.addEventListener('click', async () => {
     buildButton.disabled = true;
     builderError.textContent = '';
@@ -45,14 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const config = await response.json();
       const keys = window.CFNEW_SETTINGS.map(field => field.key);
       const settings = Object.fromEntries(keys.filter(key => config[key] !== undefined && config[key] !== null).map(key => [key, config[key]]));
-      sessionStorage.setItem('cfnew-builder-draft', JSON.stringify({ uuid: window.CFNEW.uuid, settings }));
+      sessionStorage.setItem('cfnew-builder-draft', JSON.stringify({ uuid: window.CFNEW.uuid, settings, coreVersion: config.coreVersion }));
       location.assign('/builder#import');
     } catch (error) {
       builderError.textContent = error.message || '浏览器暂时无法带入配置，请直接打开个人 Worker 页面。';
       buildButton.disabled = false;
     }
   });
-  builderDescription.append(builderTitle, builderHint, builderError);
+  if (updateAvailable) builderDescription.append(builderTitle);
+  builderDescription.append(versions, builderHint, builderError);
   builderCard.append(builderDescription, buildButton);
   document.querySelector('.container .header')?.after(builderCard);
   const connectionNotice = window.CFConnectionFlow.connectionNotice({ host: window.CFNEW.host, uuid: window.CFNEW.uuid, config: window.CFNEW.config, buildId: connectionBuildId, storageWarning: connectionStorageWarning });
@@ -62,69 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     notice.setAttribute('role', 'status');
     notice.textContent = connectionNotice;
     builderCard.before(notice);
-  }
-  const release = window.CFNEW.release;
-  const ignoredUpdateKey = 'cfnew-panel-ignored-update';
-  let ignoredVersion = '';
-  try { ignoredVersion = localStorage.getItem(ignoredUpdateKey) || ''; } catch {}
-  if (release.needsUpdate && ignoredVersion !== release.panelVersion) {
-    const notice = document.createElement('section');
-    notice.id = 'coreVersionStatus';
-    notice.dataset.updateRequired = String(release.needsUpdate);
-    notice.setAttribute('role', 'status');
-    const title = document.createElement('strong');
-    title.textContent = '内核需要更新';
-    const versions = document.createElement('div');
-    versions.textContent = '面板版本 ' + release.panelVersion + ' · 内核版本 ' + (release.coreVersion || '未标版本（旧内核）');
-    notice.append(title, versions);
-    if (release.needsUpdate) {
-      const hint = document.createElement('p');
-      hint.textContent = '当前内核与面板版本不一致。请上传配套内核，保留原来的 u 和 C/c 绑定，然后刷新此页。';
-      notice.append(hint);
-    }
-    const details = document.createElement('details');
-    details.open = release.needsUpdate;
-    const summary = document.createElement('summary');
-    summary.textContent = '本次更新了什么';
-    const changes = document.createElement('ul');
-
-    for (const text of release.changes) {
-      const item = document.createElement('li'); item.textContent = text; changes.append(item);
-    }
-    const downloads = document.createElement('div');
-    downloads.className = 'release-downloads';
-    for (const [label, url] of [['下载 pages.zip', release.zipUrl], ['下载 _worker.js', release.workerUrl]]) {
-      const link = document.createElement('a');
-      link.textContent = label; link.href = url; link.target = '_blank'; link.rel = 'noopener noreferrer';
-      downloads.append(link);
-    }
-    details.append(summary, changes, downloads);
-    const actions = document.createElement('div');
-    actions.className = 'release-actions';
-    const dismiss = document.createElement('button');
-    dismiss.type = 'button';
-    dismiss.id = 'dismissCoreUpdate';
-    dismiss.textContent = '知道了';
-    dismiss.addEventListener('click', () => notice.remove());
-    const ignore = document.createElement('button');
-    ignore.type = 'button';
-    ignore.id = 'ignoreCoreUpdate';
-    ignore.textContent = '本次更新不再提醒';
-    const storageError = document.createElement('p');
-    storageError.hidden = true;
-    storageError.setAttribute('role', 'status');
-    ignore.addEventListener('click', () => {
-      try {
-        localStorage.setItem(ignoredUpdateKey, release.panelVersion);
-        notice.remove();
-      } catch {
-        storageError.textContent = '浏览器未能保存，请用“知道了”关闭提示。';
-        storageError.hidden = false;
-      }
-    });
-    actions.append(dismiss, ignore);
-    notice.append(details, actions, storageError);
-    document.body.prepend(notice);
   }
   const links = document.querySelectorAll('[onclick]');
   for (const link of links) {

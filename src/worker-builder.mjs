@@ -1,14 +1,12 @@
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
 import { minify } from 'terser';
 import { zipSync, strToU8 } from 'fflate';
 import { settingKeys, settingFlags } from './settings.mjs';
+import { source, sourceHash, CORE_VERSION } from './worker-source.mjs';
 export { settingKeys } from './settings.mjs';
+export { CORE_VERSION } from './worker-source.mjs';
 
-export const BUILDER_VERSION = '2';
-export const CORE_VERSION = '2026.10.17.2';
-const source = await readFile(new URL('./worker-core.js', import.meta.url), 'utf8');
-const sourceHash = createHash('sha256').update(source).digest('hex');
+export const BUILDER_VERSION = '3';
 const sourceExport = source.match(/export\s*\{\s*([\w$]+)\s+as\s+default\s*\}\s*;?\s*$/);
 if (!sourceExport) throw new Error('内置 Worker 的模块格式不受支持');
 const coreBody = source.slice(0, sourceExport.index);
@@ -70,8 +68,8 @@ export default {
     mangle: { toplevel: true, nth_identifier: { get: n => prefix + n.toString(36) } },
     format: { ascii_only: true, comments: false },
   });
-  const code = `// UUID: ${uuid}\n` + result.code + '\n';
-  return { code, buildId, sha256: hash(code), bytes: Buffer.byteLength(code), format };
+  const code = `// UUID: ${uuid}\n// Core version: ${CORE_VERSION}\n` + result.code + '\n';
+  return { code, buildId, coreVersion: CORE_VERSION, sha256: hash(code), bytes: Buffer.byteLength(code), format };
 }
 
 export async function handleBuildDownload(request) {
@@ -97,6 +95,7 @@ export async function handleBuildDownload(request) {
       'Content-Disposition': `attachment; filename="${pages ? 'Pages-' + result.buildId + '.zip' : '_worker-' + result.buildId + '.js'}"`,
       'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff',
       'X-Build-Id': result.buildId, 'X-Worker-SHA256': result.sha256, 'X-Worker-Bytes': String(result.bytes),
+      'X-Core-Version': result.coreVersion,
     } });
   } catch { return respond('构建未完成，请稍后重试', 500); }
   finally { building--; }
